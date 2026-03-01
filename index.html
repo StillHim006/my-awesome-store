@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <h1>My Awesome Store</h1>
+    </header>
+    <main class="product-grid" id="product-grid">
+        <!-- Products will be loaded here by script.js -->
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Load products on index page
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('products.json')
+                .then(response => response.json())
+                .then(products => {
+                    const grid = document.getElementById('product-grid');
+                    products.forEach(product => {
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.innerHTML = `
+                            <img src="${product.image}" alt="${product.name}">
+                            <h3>${product.name}</h3>
+                            <p class="price">$${product.price.toFixed(2)}</p>
+                            <p>${product.description}</p>
+                            <a href="product.html?id=${product.id}" class="btn">View Details</a>
+                        `;
+                        grid.appendChild(card);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

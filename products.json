@@ -1,0 +1,23 @@
+[
+  {
+    "id": "watch_01",
+    "name": "Luxury Gold Watch",
+    "price": 199.99,
+    "image": "images/watch_01.jfif",
+    "description": "Elegant design with genuine leather strap."
+  },
+  {
+    "id": "shoes_02",
+    "name": "Sport Running Shoes",
+    "price": 89.99,
+    "image": "images/shoes_02.jfif",
+    "description": "Lightweight and breathable for maximum comfort."
+  },
+  {
+    "id": "bag_03",
+    "name": "Canvas Backpack",
+    "price": 49.99,
+    "image": "images/bag_03.jfif",
+    "description": "Durable and spacious for everyday use."
+  }
+]

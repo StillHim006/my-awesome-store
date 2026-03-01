@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - My Awesome Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+
+    <main class="product-detail" id="product-detail">
+        <!-- Product details will be injected here by JavaScript -->
+    </main>
+
+    <section class="order-form">
+        <h2>Place Your Order</h2>
+        <form id="orderForm" method="POST" action="YOUR_WEB_APP_URL_HERE">
+            <input type="text" name="Name" placeholder="Your Name" required>
+            <input type="tel" name="Phone" placeholder="Phone Number" required>
+            <input type="text" name="Location" placeholder="Delivery Location" required>
+
+            <!-- Hidden fields filled by JavaScript -->
+            <input type="hidden" name="Product" id="hiddenProduct">
+            <input type="hidden" name="Price" id="hiddenPrice">
+            <input type="hidden" name="Quantity" id="hiddenQuantity">
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="visibleQuantity" min="1" value="1" required>
+
+            <p>Total: $<span id="totalPrice">0.00</span></p>
+
+            <button type="submit">Order Now</button>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        // This script will be defined in script.js, but we'll also write it inline for clarity.
+        // We'll put the main logic in script.js, so just include it.
+    </script>
+</body>
+</html>
