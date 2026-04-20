@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1100px;
             margin: 0 auto;
             background: rgba(10, 18, 28, 0.85);
             backdrop-filter: blur(8px);
@@ -66,34 +66,56 @@
             transform: scale(1.02);
         }
 
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 24px;
-            background: #0a121cb3;
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
+        .example-card {
+            background: rgba(20, 30, 45, 0.7);
+            border-left: 5px solid #FFD966;
+            border-radius: 20px;
+            padding: 20px;
+            transition: 0.2s;
         }
 
-        th {
-            background: #1f2e3a;
+        .example-card:hover {
+            background: rgba(30, 45, 60, 0.8);
+            transform: translateX(5px);
+        }
+
+        .card-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #FFD966;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #FFD96680;
+            padding-bottom: 6px;
+        }
+
+        .card-field {
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .field-label {
+            font-weight: bold;
+            min-width: 110px;
             color: #FFDE9E;
-            padding: 14px 12px;
-            text-align: left;
-            font-weight: 600;
         }
 
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #2a3a4a;
-            vertical-align: top;
+        .field-value {
+            flex: 1;
+            color: #eef4ff;
+            word-break: break-word;
+            white-space: pre-wrap;
         }
 
-        tr:hover {
-            background: #0f1a24;
+        .field-value.empty {
+            color: #aa8866;
+            font-style: italic;
         }
 
         .status-msg {
@@ -136,7 +158,7 @@
         <button id="refreshBtn">⟳ Refresh Data</button>
     </div>
 
-    <div class="table-wrapper" id="tableContainer">
+    <div id="cardsContainer" class="cards-container">
         <div class="status-msg">Loading examples from Google Sheet...</div>
     </div>
 
@@ -150,76 +172,52 @@
 </div>
 
 <script>
-    // === REPLACE WITH YOUR APPS SCRIPT URL (same as submission, but with ?format=csv) ===
     const BASE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKtVzp4yiyWkfVRsJ0GQDBxv8siu9TB0eA5mptEs745Tm4WanTJ94zPlMGHvVopY5W/exec";
 
-    async function fetchAndRenderExamples() {
-        const container = document.getElementById('tableContainer');
-        container.innerHTML = '<div class="status-msg">⏳ Fetching latest examples...</div>';
+    // Robust CSV parser that handles quotes and commas inside fields
+    function parseCSV(csvText) {
+        const rows = [];
+        let currentRow = [];
+        let currentField = "";
+        let inQuotes = false;
+        let i = 0;
+        const len = csvText.length;
 
-        try {
-            // Expect the Apps Script to return CSV when ?format=csv is added
-            const url = `${BASE_SCRIPT_URL}?format=csv&t=${Date.now()}`;
-            const response = await fetch(url);
-            const csvText = await response.text();
-
-            // Parse CSV (simple but robust)
-            const rows = parseCSV(csvText);
-            if (!rows || rows.length < 2) {
-                container.innerHTML = '<div class="status-msg">📭 No examples submitted yet. Be the first!</div>';
-                return;
+        while (i < len) {
+            const ch = csvText[i];
+            if (ch === '"') {
+                // Toggle quote mode
+                inQuotes = !inQuotes;
+                i++;
+                continue;
             }
-
-            const headers = rows[0];
-            const dataRows = rows.slice(1);
-
-            // Build HTML table
-            let html = '<table>\n<thead><tr>';
-            headers.forEach(h => {
-                html += `<th>${escapeHtml(h)}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-
-            for (let i = 0; i < dataRows.length; i++) {
-                html += '<tr>';
-                dataRows[i].forEach(cell => {
-                    html += `<td>${escapeHtml(cell)}</td>`;
-                });
-                html += '</tr>';
+            if (ch === ',' && !inQuotes) {
+                // End of field
+                currentRow.push(currentField);
+                currentField = "";
+                i++;
+                continue;
             }
-            html += '</tbody></table>';
-            container.innerHTML = html;
-
-        } catch (err) {
-            console.error(err);
-            container.innerHTML = '<div class="status-msg">⚠️ Failed to load data. Make sure your Apps Script returns CSV and is published.</div>';
+            if (ch === '\n' && !inQuotes) {
+                // End of row
+                currentRow.push(currentField);
+                rows.push(currentRow);
+                currentRow = [];
+                currentField = "";
+                i++;
+                continue;
+            }
+            // Normal character
+            currentField += ch;
+            i++;
         }
-    }
-
-    // Simple CSV parser (handles quotes, commas, newlines inside cells? – basic version)
-    function parseCSV(csv) {
-        const lines = csv.split(/\r?\n/).filter(l => l.trim().length > 0);
-        if (lines.length === 0) return [];
-        const result = [];
-        for (let line of lines) {
-            const row = [];
-            let inQuote = false;
-            let current = '';
-            for (let i = 0; i < line.length; i++) {
-                const ch = line[i];
-                if (ch === '"') {
-                    inQuote = !inQuote;
-                } else if (ch === ',' && !inQuote) {
-                    row.push(current);
-                    current = '';
-                } else {
-                    current += ch;
-                }
-            }
-            row.push(current);
-            result.push(row.map(cell => cell.replace(/^"|"$/g, '').trim()));
+        // Push last field and row if any
+        if (currentField !== "" || currentRow.length > 0) {
+            currentRow.push(currentField);
+            rows.push(currentRow);
         }
-        return result;
+        // Trim whitespace and remove outer quotes from each field
+        return rows.map(row => row.map(field => field.trim().replace(/^"(.*)"$/, '$1')));
     }
 
     function escapeHtml(str) {
@@ -230,6 +228,78 @@
             if (m === '>') return '&gt;';
             return m;
         });
+    }
+
+    async function fetchAndRenderExamples() {
+        const container = document.getElementById('cardsContainer');
+        container.innerHTML = '<div class="status-msg">⏳ Fetching latest examples...</div>';
+
+        try {
+            const url = `${BASE_SCRIPT_URL}?format=csv&t=${Date.now()}`;
+            const response = await fetch(url);
+            const csvText = await response.text();
+
+            const rows = parseCSV(csvText);
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="status-msg">📭 No examples submitted yet. Be the first!</div>';
+                return;
+            }
+
+            const headers = rows[0];
+            const dataRows = rows.slice(1);
+
+            // Find column indices (case-insensitive)
+            const getColIndex = (name) => headers.findIndex(h => h.toLowerCase().trim() === name.toLowerCase());
+            const idxTimestamp = getColIndex('Timestamp');
+            const idxFullName = getColIndex('FullName');
+            const idxClass = getColIndex('Class');
+            const idxIdea = getColIndex('Idea');
+            const idxContext = getColIndex('ExampleContent'); // column name from sheet
+
+            let html = '';
+            let counter = 1;
+
+            for (const row of dataRows) {
+                const timestamp = idxTimestamp >= 0 ? row[idxTimestamp] || '' : '';
+                const fullName = idxFullName >= 0 ? row[idxFullName] || '' : '';
+                const className = idxClass >= 0 ? row[idxClass] || '' : '';
+                const idea = idxIdea >= 0 ? row[idxIdea] || '' : '';
+                let context = idxContext >= 0 ? row[idxContext] || '' : '';
+                if (context.trim() === '') context = '— No context provided —';
+
+                html += `
+                    <div class="example-card">
+                        <div class="card-header">📌 No. ${counter}</div>
+                        <div class="card-field">
+                            <span class="field-label">🕒 Time Stamp:</span>
+                            <span class="field-value">${escapeHtml(timestamp)}</span>
+                        </div>
+                        <div class="card-field">
+                            <span class="field-label">👤 Full Name:</span>
+                            <span class="field-value">${escapeHtml(fullName)}</span>
+                        </div>
+                        <div class="card-field">
+                            <span class="field-label">📚 Class:</span>
+                            <span class="field-value">${escapeHtml(className)}</span>
+                        </div>
+                        <div class="card-field">
+                            <span class="field-label">💡 Idea:</span>
+                            <span class="field-value">${escapeHtml(idea)}</span>
+                        </div>
+                        <div class="card-field">
+                            <span class="field-label">📎 Contexts:</span>
+                            <span class="field-value ${context === '— No context provided —' ? 'empty' : ''}">${escapeHtml(context)}</span>
+                        </div>
+                    </div>
+                `;
+                counter++;
+            }
+
+            container.innerHTML = html;
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="status-msg">⚠️ Failed to load data. Make sure your Apps Script returns CSV and is published.</div>';
+        }
     }
 
     document.getElementById('refreshBtn').addEventListener('click', fetchAndRenderExamples);
