@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMS | Submitted Examples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 30px 20px;
+            color: #eef4ff;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(10, 18, 28, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 28px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #FFD966;
+            text-align: center;
+        }
+
+        .sub {
+            text-align: center;
+            color: #9bb8da;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #2a3a4a;
+            padding-bottom: 12px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+
+        button {
+            background: #FFC857;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+
+        button:hover {
+            background: #FF9F2E;
+            transform: scale(1.02);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 24px;
+            background: #0a121cb3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: #1f2e3a;
+            color: #FFDE9E;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #2a3a4a;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #0f1a24;
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 40px;
+            color: #ffb570;
+            font-style: italic;
+        }
+
+        footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c8aa0;
+            border-top: 1px solid #2a3a4a;
+            padding-top: 20px;
+        }
+
+        a {
+            color: #FFD966;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Submitted Examples</h1>
+    <div class="sub">IMS Department • CS&IT • University of Basrah (UOB)</div>
+
+    <div class="toolbar">
+        <button id="refreshBtn">⟳ Refresh Data</button>
+    </div>
+
+    <div class="table-wrapper" id="tableContainer">
+        <div class="status-msg">Loading examples from Google Sheet...</div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" class="back-link">← Back to submission form</a>
+    </div>
+
+    <footer>
+        🧠 Developer: TD (Alaa The Great) • IMS • CS&IT • University of Basrah
+    </footer>
+</div>
+
+<script>
+    // === REPLACE WITH YOUR APPS SCRIPT URL (same as submission, but with ?format=csv) ===
+    const BASE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXSGkP6hL3SGyjPn9BaFiAACw-pPjlEvC9Dxi0RZWyWDu0VjYfUDjAvRECXWZnZSdX/exec";
+
+    async function fetchAndRenderExamples() {
+        const container = document.getElementById('tableContainer');
+        container.innerHTML = '<div class="status-msg">⏳ Fetching latest examples...</div>';
+
+        try {
+            // Expect the Apps Script to return CSV when ?format=csv is added
+            const url = `${BASE_SCRIPT_URL}?format=csv&t=${Date.now()}`;
+            const response = await fetch(url);
+            const csvText = await response.text();
+
+            // Parse CSV (simple but robust)
+            const rows = parseCSV(csvText);
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="status-msg">📭 No examples submitted yet. Be the first!</div>';
+                return;
+            }
+
+            const headers = rows[0];
+            const dataRows = rows.slice(1);
+
+            // Build HTML table
+            let html = '<table>\n<thead><tr>';
+            headers.forEach(h => {
+                html += `<th>${escapeHtml(h)}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            for (let i = 0; i < dataRows.length; i++) {
+                html += '<tr>';
+                dataRows[i].forEach(cell => {
+                    html += `<td>${escapeHtml(cell)}</td>`;
+                });
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            container.innerHTML = html;
+
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="status-msg">⚠️ Failed to load data. Make sure your Apps Script returns CSV and is published.</div>';
+        }
+    }
+
+    // Simple CSV parser (handles quotes, commas, newlines inside cells? – basic version)
+    function parseCSV(csv) {
+        const lines = csv.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length === 0) return [];
+        const result = [];
+        for (let line of lines) {
+            const row = [];
+            let inQuote = false;
+            let current = '';
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    inQuote = !inQuote;
+                } else if (ch === ',' && !inQuote) {
+                    row.push(current);
+                    current = '';
+                } else {
+                    current += ch;
+                }
+            }
+            row.push(current);
+            result.push(row.map(cell => cell.replace(/^"|"$/g, '').trim()));
+        }
+        return result;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', fetchAndRenderExamples);
+    fetchAndRenderExamples();
+</script>
+</body>
+</html>
