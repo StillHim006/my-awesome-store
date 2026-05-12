@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Ratings | Exam Prep Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: #e0e7ff;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .toolbar button, .toolbar a {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .toolbar a {
+            background-color: #64748b;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feedback-card {
+            background: #f8fafc;
+            border-left: 5px solid #4f46e5;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            transition: transform 0.1s;
+        }
+
+        .feedback-card:hover {
+            transform: translateX(5px);
+        }
+
+        .card-header {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-bottom: 0.8rem;
+        }
+
+        .stars-rating {
+            color: #fbbf24;
+            font-size: 1.2rem;
+            margin: 0.3rem 0;
+        }
+
+        .row {
+            margin: 0.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .field-label {
+            font-weight: bold;
+            min-width: 80px;
+            color: #334155;
+        }
+
+        .field-value {
+            color: #1e293b;
+            flex: 1;
+        }
+
+        .anonymous {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="exam-prep.html">📖 Exam Prep</a>
+        <a href="suggestions.html">💡 Suggestions</a>
+        <a href="feedback.html">📝 Feedback</a>
+    </div>
+    <h1>⭐ User Feedback & Ratings</h1>
+    <div class="sub">What our users say about the Exam Prep Hub</div>
+
+    <div class="toolbar">
+        <button id="refreshBtn">⟳ Refresh</button>
+        <a href="feedback.html">+ Submit Feedback</a>
+    </div>
+
+    <div id="cardsContainer" class="cards-container">
+        <div class="status-msg">Loading feedback...</div>
+    </div>
+
+    <footer>📊 Ratings are stored securely in a Google Sheet. Names are optional.</footer>
+</div>
+
+<script>
+    const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE"; // replace with your URL
+
+    function parseCSV(csvText) {
+        const rows = [];
+        let currentRow = [], currentField = "", inQuotes = false;
+        for (let i = 0; i < csvText.length; i++) {
+            const ch = csvText[i];
+            if (ch === '"') { inQuotes = !inQuotes; continue; }
+            if (ch === ',' && !inQuotes) { currentRow.push(currentField); currentField = ""; continue; }
+            if (ch === '\n' && !inQuotes) { currentRow.push(currentField); rows.push(currentRow); currentRow = []; currentField = ""; continue; }
+            currentField += ch;
+        }
+        if (currentField !== "" || currentRow.length) { currentRow.push(currentField); rows.push(currentRow); }
+        return rows.map(row => row.map(f => f.trim().replace(/^"(.*)"$/, '$1')));
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    async function loadFeedback() {
+        const container = document.getElementById('cardsContainer');
+        container.innerHTML = '<div class="status-msg">⏳ Fetching ratings...</div>';
+        try {
+            const url = `${APPS_SCRIPT_URL}?t=${Date.now()}`;
+            const resp = await fetch(url);
+            const csvText = await resp.text();
+            const rows = parseCSV(csvText);
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="status-msg">📭 No feedback yet. Be the first to rate!</div>';
+                return;
+            }
+            const headers = rows[0];
+            const dataRows = rows.slice(1);
+            const idxTimestamp = headers.findIndex(h => h.toLowerCase() === 'timestamp');
+            const idxName = headers.findIndex(h => h.toLowerCase() === 'name');
+            const idxRating = headers.findIndex(h => h.toLowerCase() === 'rating');
+            const idxComment = headers.findIndex(h => h.toLowerCase() === 'comment');
+
+            let html = '';
+            for (let i = 0; i < dataRows.length; i++) {
+                const row = dataRows[i];
+                const timestamp = idxTimestamp >= 0 ? row[idxTimestamp] : '';
+                let rawName = idxName >= 0 ? row[idxName] : '';
+                const name = rawName && rawName.trim() !== '' ? escapeHtml(rawName.trim()) : null;
+                const rating = idxRating >= 0 ? row[idxRating] : '';
+                const comment = idxComment >= 0 ? row[idxComment] : '';
+                const ratingNum = parseInt(rating) || 0;
+                const starsFull = '★'.repeat(ratingNum);
+                const starsEmpty = '☆'.repeat(5 - ratingNum);
+                const starsDisplay = starsFull + starsEmpty;
+
+                html += `
+                    <div class="feedback-card">
+                        <div class="card-header">📌 Feedback #${dataRows.length - i}</div>
+                        <div class="row">
+                            <span class="field-label">🕒 Date:</span>
+                            <span class="field-value">${escapeHtml(timestamp)}</span>
+                        </div>
+                        <div class="row">
+                            <span class="field-label">👤 Name:</span>
+                            <span class="field-value">${name ? name : '<span class="anonymous">Anonymous</span>'}</span>
+                        </div>
+                        <div class="stars-rating">${starsDisplay} (${ratingNum}/5)</div>
+                        <div class="row">
+                            <span class="field-label">💬 Comment:</span>
+                            <span class="field-value">${comment ? escapeHtml(comment) : '— no comment —'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="status-msg">⚠️ Failed to load feedback. Please refresh later.</div>';
+        }
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', loadFeedback);
+    loadFeedback();
+</script>
+</body>
+</html>
