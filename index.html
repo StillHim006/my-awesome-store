@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMS | Submit Your Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Exam Prep Hub | Home</title>
     <style>
         * {
             margin: 0;
@@ -12,217 +13,122 @@
         }
 
         body {
-            background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #eee;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            padding: 2rem;
         }
 
-        .glass-card {
-            background: rgba(12, 20, 30, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 30px;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
+        .landing-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 3rem 2rem;
+            max-width: 600px;
             width: 100%;
-            max-width: 650px;
-            transition: 0.3s;
+            text-align: center;
+            backdrop-filter: blur(2px);
+            transition: transform 0.3s ease;
+        }
+
+        .landing-card:hover {
+            transform: scale(1.01);
         }
 
         h1 {
-            color: #FFD966;
-            text-align: center;
-            font-size: 2rem;
-            letter-spacing: 1px;
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
         }
 
-        .subhead {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #9bb8da;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a3a4a;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #FFDE9E;
-        }
-
-        .required-star {
-            color: #ff7b72;
-            margin-left: 4px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            background: #0e1a1f;
-            border: 1px solid #ffd96660;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: #FFC857;
-            box-shadow: 0 0 8px rgba(255, 200, 80, 0.3);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(95deg, #FFC857, #FF9F2E);
-            border: none;
+        .owner {
+            font-size: 1.2rem;
+            color: #4f46e5;
+            background: #e0e7ff;
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
             border-radius: 40px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
-            color: #1e2a2f;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            opacity: 0.92;
-            box-shadow: 0 8px 20px rgba(255, 200, 80, 0.3);
-        }
-
-        .response {
-            margin-top: 20px;
-            text-align: center;
-            color: #c3e88d;
+            margin-bottom: 2rem;
             font-weight: 500;
-            min-height: 48px;
         }
 
-        .view-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #b4c8ff;
+        .description {
+            color: #334155;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 60px;
             text-decoration: none;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
         }
 
-        .view-link:hover {
-            text-decoration: underline;
-            color: #FFD966;
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-3px);
         }
 
         footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #6c8aa0;
-            border-top: 1px solid #2a3a4a;
-            padding-top: 16px;
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
         }
 
-        footer span {
-            color: #FFD966;
+        @media (max-width: 500px) {
+            .landing-card { padding: 2rem 1.5rem; }
+            h1 { font-size: 2rem; }
+            .btn { padding: 0.7rem 1.5rem; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-<div class="glass-card">
-    <h1>📚 IMS Example Exchange</h1>
-    <div class="subhead">Department of Intelligent Medical Systems (IMS) • College of CS&IT • UOB</div>
-
-    <form id="exampleForm">
-        <div class="form-group">
-            <label>Full Name <span class="required-star">*</span></label>
-            <input type="text" id="fullName" required placeholder="e.g., Alaa Ahmed">
+    <div class="landing-card">
+        <h1>📚 Exam Preparation Hub</h1>
+        <div class="owner">👤 Owned by: <strong>THE GREAT ALAA</strong></div>
+        <div class="description">
+            Your central platform for mastering EHR, Machine Learning, and more.<br>
+            Choose your path below.
         </div>
-
-        <div class="form-group">
-            <label>Class <span class="required-star">*</span></label>
-            <select id="classGroup" required>
-                <option value="" disabled selected>– Select your class –</option>
-                <option value="A">Class A</option>
-                <option value="B">Class B</option>
-            </select>
+        <div class="button-group">
+            <a href="exam-prep.html" class="btn btn-primary">📖 Exam Preparation</a>
+            <a href="suggestions.html" class="btn btn-secondary">💡 Suggestions</a>
         </div>
-
-        <div class="form-group">
-            <label>The Example Idea <span class="required-star">*</span></label>
-            <textarea id="idea" required placeholder="Describe your example idea clearly..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>If you have the example (code / screenshot / link – optional)</label>
-            <textarea id="exampleContent" placeholder="Paste your code, link, or explanation here (optional)"></textarea>
-        </div>
-
-        <button type="submit" id="submitBtn">✨ Share Example ✨</button>
-        <div id="responseArea" class="response"></div>
-        <a href="view.html" class="view-link">📋 Show taken examples →</a>
-    </form>
-
-    <footer>
-        🖥️ Developer: TD (a.k.a. Alaa The Great) • IMS • CS&IT • University of Basrah (UOB)
-    </footer>
-</div>
-
-<script>
-    // === REPLACE WITH YOUR GOOGLE APPS SCRIPT URL ===
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKtVzp4yiyWkfVRsJ0GQDBxv8siu9TB0eA5mptEs745Tm4WanTJ94zPlMGHvVopY5W/exec";
-
-    const form = document.getElementById('exampleForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const responseDiv = document.getElementById('responseArea');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Sending...";
-
-        const payload = {
-            fullName: document.getElementById('fullName').value.trim(),
-            classGroup: document.getElementById('classGroup').value,
-            idea: document.getElementById('idea').value.trim(),
-            exampleContent: document.getElementById('exampleContent').value.trim() || ""
-        };
-
-        try {
-            // Using no-cors mode to avoid CORS issues (works with POST to Apps Script)
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(payload)
-            });
-
-            responseDiv.innerHTML = "✅ Your example has been recorded! Thank you.";
-            form.reset();
-            setTimeout(() => { responseDiv.innerHTML = ""; }, 5000);
-        } catch (err) {
-            responseDiv.innerHTML = "❌ Error: Could not submit. Check network or script URL.";
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "✨ Share Example ✨";
-        }
-    });
-</script>
+        <footer>⚡ Interactive quizzes & lecture exercises</footer>
+    </div>
 </body>
 </html>
