@@ -31,14 +31,12 @@
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
             width: 100%;
             max-width: 650px;
-            transition: 0.3s;
         }
 
         h1 {
             color: #FFD966;
             text-align: center;
             font-size: 2rem;
-            letter-spacing: 1px;
         }
 
         .subhead {
@@ -66,7 +64,7 @@
             margin-left: 4px;
         }
 
-        input, select, textarea {
+        input, textarea {
             width: 100%;
             padding: 12px 14px;
             background: #0e1a1f;
@@ -75,10 +73,9 @@
             color: #fff;
             font-size: 0.95rem;
             outline: none;
-            transition: 0.2s;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, textarea:focus {
             border-color: #FFC857;
             box-shadow: 0 0 8px rgba(255, 200, 80, 0.3);
         }
@@ -107,7 +104,6 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: 0.2s;
             margin-top: 10px;
             color: #1e2a2f;
         }
@@ -121,14 +117,11 @@
         .response {
             margin-top: 20px;
             text-align: center;
-            color: #c3e88d;
             font-weight: 500;
             min-height: 48px;
         }
-
-        .error-response {
-            color: #ff7b72;
-        }
+        .success { color: #c3e88d; }
+        .error { color: #ff7b72; }
 
         .view-link {
             display: block;
@@ -138,7 +131,6 @@
             text-decoration: none;
             font-size: 0.9rem;
         }
-
         .view-link:hover {
             text-decoration: underline;
             color: #FFD966;
@@ -192,7 +184,6 @@
 </div>
 
 <script>
-    // === REPLACE WITH YOUR GOOGLE APPS SCRIPT URL (from step 1) ===
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-f1HhQJb9Ys97WN_8u6tFLIsEA1zXRzkOHo6q9GgNmCQZ6lB0bIto13WbTxUyJg6K/exec";
 
     let selectedRating = 0;
@@ -217,8 +208,8 @@
 
         if (selectedRating === 0) {
             responseDiv.innerHTML = "❌ Please select a rating (1–5 stars).";
-            responseDiv.classList.add('error-response');
-            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.classList.remove('error-response'); }, 3000);
+            responseDiv.className = "response error";
+            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 3000);
             return;
         }
 
@@ -232,22 +223,22 @@
         };
 
         try {
+            // IMPORTANT: Do NOT set 'Content-Type' header in no-cors mode
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
             responseDiv.innerHTML = "✅ Thank you for your feedback!";
-            responseDiv.classList.remove('error-response');
+            responseDiv.className = "response success";
             form.reset();
             selectedRating = 0;
             stars.forEach(s => s.classList.remove('selected'));
-            setTimeout(() => { responseDiv.innerHTML = ""; }, 4000);
+            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
         } catch (err) {
-            responseDiv.innerHTML = "❌ Submission failed. Please check your network or try again later.";
-            responseDiv.classList.add('error-response');
             console.error(err);
+            responseDiv.innerHTML = "❌ Submission failed. Please try again.";
+            responseDiv.className = "response error";
         } finally {
             submitBtn.disabled = false;
             submitBtn.innerText = "📝 Submit Feedback";
