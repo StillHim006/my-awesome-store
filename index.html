@@ -2,134 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Exam Prep Hub | Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .landing-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            padding: 3rem 2rem;
-            max-width: 650px;
-            width: 100%;
-            text-align: center;
-            backdrop-filter: blur(2px);
-            transition: transform 0.3s ease;
-        }
-
-        .landing-card:hover {
-            transform: scale(1.01);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .owner {
-            font-size: 1.2rem;
-            color: #4f46e5;
-            background: #e0e7ff;
-            display: inline-block;
-            padding: 0.3rem 1.2rem;
-            border-radius: 40px;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .description {
-            color: #334155;
-            margin-bottom: 2.5rem;
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.6rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 60px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: #4f46e5;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary:hover {
-            background-color: #4338ca;
-            transform: translateY(-3px);
-        }
-
-        .btn-secondary {
-            background-color: #f1f5f9;
-            color: #1e293b;
-            border: 1px solid #cbd5e1;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e2e8f0;
-            transform: translateY(-3px);
-        }
-
-        footer {
-            margin-top: 2.5rem;
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-
-        @media (max-width: 500px) {
-            .landing-card { padding: 2rem 1.5rem; }
-            h1 { font-size: 2rem; }
-            .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Prep - Feedback System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="landing-card">
-        <h1>📚 Exam Preparation Hub</h1>
-        <div class="owner">👤 Owned by: <strong>ALAA THE GREAT</strong></div>
-        <div class="description">
-            Your central platform for mastering EHR, Machine Learning, and more.<br>
-            Choose your path below.
+    <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="exam-prep.html">Exam Prep</a>
+        <a href="suggestions.html">Suggestions</a>
+        <a href="feedback.html">Submit Feedback</a>
+        <a href="ratings-view.html">View Ratings</a>
+        <a href="suggestions-view.html">View Suggestions</a>
+    </nav>
+
+    <main class="container">
+        <div class="glass-card text-center">
+            <h1>Welcome to Exam Prep</h1>
+            <p>Your ultimate platform for exam preparation. We value your feedback to help us improve your learning experience.</p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <a href="feedback.html" class="btn btn-primary">Share Feedback</a>
+                <a href="ratings-view.html" class="btn" style="border: 1px solid var(--primary); color: var(--primary);">Read Reviews</a>
+            </div>
         </div>
-        <div class="button-group">
-            <a href="exam-prep.html" class="btn btn-primary">📖 Exam Preparation</a>
-            <a href="Suggestion.html" class="btn btn-secondary">💡 Suggestions</a>
-            <a href="feedback.html" class="btn btn-secondary">📝 Feedback</a>
-            <a href="ratings-view.html" class="btn btn-secondary">⭐ Ratings</a>
+
+        <div class="mt-4 grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
+            <div class="glass-card" style="padding: 1.5rem;">
+                <h3>Practice Exams</h3>
+                <p>Access thousands of curated questions.</p>
+            </div>
+            <div class="glass-card" style="padding: 1.5rem;">
+                <h3>Progress Tracking</h3>
+                <p>Monitor your improvement over time.</p>
+            </div>
+            <div class="glass-card" style="padding: 1.5rem;">
+                <h3>Community Support</h3>
+                <p>Join thousands of students worldwide.</p>
+            </div>
         </div>
-        <footer>⚡ Interactive quizzes & lecture exercises</footer>
-    </div>
+    </main>
 </body>
 </html>

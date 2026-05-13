@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Ratings - Exam Prep</title>
+    <title>View Suggestions - Exam Prep</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,28 +12,28 @@
         <a href="exam-prep.html">Exam Prep</a>
         <a href="suggestions.html">Suggestions</a>
         <a href="feedback.html">Submit Feedback</a>
-        <a href="ratings-view.html" class="active">View Ratings</a>
-        <a href="suggestions-view.html">View Suggestions</a>
+        <a href="ratings-view.html">View Ratings</a>
+        <a href="suggestions-view.html" class="active">View Suggestions</a>
     </nav>
 
     <main class="container">
         <div class="glass-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h1>Community Ratings</h1>
-                <button onclick="fetchRatings()" class="btn btn-primary" id="refreshBtn">Refresh</button>
+                <h1>Community Suggestions</h1>
+                <button onclick="fetchSuggestions()" class="btn btn-primary" id="refreshBtn">Refresh</button>
             </div>
 
             <div id="loading" class="text-center">
-                <p>Loading feedback...</p>
+                <p>Loading suggestions...</p>
             </div>
 
-            <div id="ratingsContainer" class="rating-grid">
-                <!-- Ratings will be injected here -->
+            <div id="suggestionsContainer" class="rating-grid">
+                <!-- Suggestions will be injected here -->
             </div>
 
             <div id="emptyMessage" class="hidden text-center mt-4">
-                <p>No ratings yet. Be the first to share your feedback!</p>
-                <a href="feedback.html" class="btn btn-primary mt-4">Submit Feedback</a>
+                <p>No suggestions yet. Have a great idea? Share it with us!</p>
+                <a href="suggestions.html" class="btn btn-primary mt-4">Submit Suggestion</a>
             </div>
         </div>
     </main>
@@ -42,14 +42,14 @@
         // REPLACE THIS WITH YOUR DEPLOYED APPS SCRIPT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymC8ImcCmFrOXr4huMHJahD70YeD_TsuRL3sUPww7CDoQYu9vaojLqRymXm2M2aQBSRw/exec';
 
-        async function fetchRatings() {
-            const container = document.getElementById('ratingsContainer');
+        async function fetchSuggestions() {
+            const container = document.getElementById('suggestionsContainer');
             const loading = document.getElementById('loading');
             const emptyMessage = document.getElementById('emptyMessage');
             const refreshBtn = document.getElementById('refreshBtn');
 
             if (SCRIPT_URL.includes('YOUR_DEPLOYED_ID')) {
-                loading.innerHTML = '<p style="color: var(--error);">Please update SCRIPT_URL in ratings-view.html</p>';
+                loading.innerHTML = '<p style="color: var(--error);">Please update SCRIPT_URL in suggestions-view.html</p>';
                 return;
             }
 
@@ -60,7 +60,7 @@
             emptyMessage.classList.add('hidden');
 
             try {
-                const response = await fetch(SCRIPT_URL + '?type=feedback');
+                const response = await fetch(SCRIPT_URL + '?type=suggestion');
                 const csvData = await response.text();
                 
                 const rows = parseCSV(csvData);
@@ -72,16 +72,16 @@
                     emptyMessage.classList.remove('hidden');
                 } else {
                     data.forEach(row => {
-                        if (row.length < 3) return; // Skip invalid rows
+                        if (row.length < 2) return; // Skip invalid rows
                         
-                        const [timestamp, name, rating, comment] = row;
-                        const card = createRatingCard(timestamp, name, rating, comment);
+                        const [timestamp, name, suggestion] = row;
+                        const card = createSuggestionCard(timestamp, name, suggestion);
                         container.appendChild(card);
                     });
                 }
             } catch (error) {
-                console.error('Error fetching ratings:', error);
-                loading.innerHTML = '<p style="color: var(--error);">Error loading feedback. Please try again later.</p>';
+                console.error('Error fetching suggestions:', error);
+                loading.innerHTML = '<p style="color: var(--error);">Error loading suggestions. Please try again later.</p>';
             } finally {
                 loading.classList.add('hidden');
                 refreshBtn.disabled = false;
@@ -131,25 +131,23 @@
             return result;
         }
 
-        function createRatingCard(timestamp, name, rating, comment) {
+        function createSuggestionCard(timestamp, name, suggestion) {
             const card = document.createElement('div');
-            card.className = 'rating-card';
-
-            const stars = '★'.repeat(parseInt(rating)) + '☆'.repeat(5 - parseInt(rating));
+            card.className = 'rating-card'; // Reuse rating-card style
 
             card.innerHTML = `
                 <div class="rating-header">
                     <span class="rating-name">${name || 'Anonymous'}</span>
-                    <span class="rating-stars">${stars}</span>
+                    <span style="font-size: 1.2rem;">💡</span>
                 </div>
                 <div class="rating-date">${timestamp}</div>
-                <div class="rating-comment">${comment || 'No comment provided.'}</div>
+                <div style="margin-top: 0.5rem; color: var(--text);">${suggestion || 'No suggestion provided.'}</div>
             `;
             return card;
         }
 
         // Initial fetch
-        fetchRatings();
+        fetchSuggestions();
     </script>
 </body>
 </html>

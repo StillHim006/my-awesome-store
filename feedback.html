@@ -3,188 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback | Exam Prep Hub</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='80' text-anchor='middle' dy='.35em' fill='%23FFD966'%3E⭐%3C/text%3E%3C/svg%3E">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #eee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .glass-card {
-            background: rgba(12, 20, 30, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 30px;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            width: 100%;
-            max-width: 650px;
-        }
-        h1 { color: #FFD966; text-align: center; font-size: 2rem; }
-        .subhead { text-align: center; color: #9bb8da; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid #2a3a4a; }
-        .form-group { margin-bottom: 22px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: #FFDE9E; }
-        .required-star { color: #ff7b72; margin-left: 4px; }
-        input, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            background: #0e1a1f;
-            border: 1px solid #ffd96660;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-        }
-        input:focus, textarea:focus {
-            border-color: #FFC857;
-            box-shadow: 0 0 8px rgba(255, 200, 80, 0.3);
-        }
-        .stars {
-            display: flex;
-            gap: 0.5rem;
-            font-size: 2rem;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        .star { color: #4a5b6e; transition: color 0.2s; }
-        .star.selected { color: #FFD966; }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(95deg, #FFC857, #FF9F2E);
-            border: none;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 10px;
-            color: #1e2a2f;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            opacity: 0.92;
-            box-shadow: 0 8px 20px rgba(255, 200, 80, 0.3);
-        }
-        .response {
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 500;
-            min-height: 48px;
-        }
-        .success { color: #c3e88d; }
-        .error { color: #ff7b72; }
-        .view-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #b4c8ff;
-            text-decoration: none;
-        }
-        .view-link:hover { text-decoration: underline; color: #FFD966; }
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #6c8aa0;
-            border-top: 1px solid #2a3a4a;
-            padding-top: 16px;
-        }
-    </style>
+    <title>Submit Feedback - Exam Prep</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="glass-card">
-    <h1>⭐ Rate Your Experience</h1>
-    <div class="subhead">Exam Preparation Hub • Your feedback helps us improve</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="exam-prep.html">Exam Prep</a>
+        <a href="suggestions.html">Suggestions</a>
+        <a href="feedback.html" class="active">Submit Feedback</a>
+        <a href="ratings-view.html">View Ratings</a>
+        <a href="suggestions-view.html">View Suggestions</a>
+    </nav>
 
-    <div class="form-group">
-        <label>Your Name (optional)</label>
-        <input type="text" id="name" placeholder="e.g., Ahmed, or leave blank">
-    </div>
+    <main class="container">
+        <div class="glass-card">
+            <h1>We'd love your feedback</h1>
+            <p>Tell us how we're doing and how we can improve.</p>
 
-    <div class="form-group">
-        <label>Rating <span class="required-star">*</span></label>
-        <div class="stars" id="starContainer">
-            <span class="star" data-value="1">★</span>
-            <span class="star" data-value="2">★</span>
-            <span class="star" data-value="3">★</span>
-            <span class="star" data-value="4">★</span>
-            <span class="star" data-value="5">★</span>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label>Your Name (Optional)</label>
+                    <input type="text" id="name" placeholder="Anonymous">
+                </div>
+
+                <div class="form-group">
+                    <label>Rating (Required)</label>
+                    <div class="star-rating">
+                        <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
+                        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comment (Optional)</label>
+                    <textarea id="comment" rows="4" placeholder="Share your experience..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Feedback</button>
+            </form>
+
+            <div id="successMessage" class="hidden text-center mt-4">
+                <div style="font-size: 3rem; color: var(--success);">✓</div>
+                <h2>Thank You!</h2>
+                <p>Your feedback has been submitted successfully.</p>
+                <button onclick="resetForm()" class="btn btn-primary">Submit Another</button>
+            </div>
+
+            <div id="errorMessage" class="hidden text-center mt-4" style="color: var(--error);">
+                <p>Something went wrong. Please check your internet connection and try again.</p>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <div class="form-group">
-        <label>Comment (optional)</label>
-        <textarea id="comment" rows="4" placeholder="Share your thoughts..."></textarea>
-    </div>
+    <script>
+        // REPLACE THIS WITH YOUR DEPLOYED APPS SCRIPT URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymC8ImcCmFrOXr4huMHJahD70YeD_TsuRL3sUPww7CDoQYu9vaojLqRymXm2M2aQBSRw/exec';
 
-    <button id="submitBtn">📝 Submit Feedback</button>
-    <div id="responseArea" class="response"></div>
-    <a href="ratings-view.html" class="view-link">⭐ View all ratings →</a>
+        const form = document.getElementById('feedbackForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
 
-    <footer>🧠 Developer: Ansam Kadhum • IMS • CS&IT • University of Basrah</footer>
-</div>
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (SCRIPT_URL.includes('YOUR_DEPLOYED_ID')) {
+                alert('Please update the SCRIPT_URL in feedback.html with your deployed Apps Script URL.');
+                return;
+            }
 
-<script>
-    // Replace with your Apps Script URL (from the new deployment)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYYPePDV6whV6sHm5sec_MdczJOiEF_UxatuZG51sQdqQbbUQRdbmu8hJDNoqwg9Ao/exec";
+            const formData = {
+                type: 'feedback',
+                name: document.getElementById('name').value,
+                rating: document.querySelector('input[name="rating"]:checked').value,
+                comment: document.getElementById('comment').value
+            };
 
-    let selectedRating = 0;
-    const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            selectedRating = parseInt(star.getAttribute('data-value'));
-            stars.forEach(s => {
-                const val = parseInt(s.getAttribute('data-value'));
-                if (val <= selectedRating) s.classList.add('selected');
-                else s.classList.remove('selected');
-            });
+            const submitBtn = form.querySelector('button');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                // Using no-cors mode as requested
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                // Since no-cors doesn't allow reading the response, we assume success if no error is thrown
+                form.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Feedback';
+            }
         });
-    });
 
-    const submitBtn = document.getElementById('submitBtn');
-    const responseDiv = document.getElementById('responseArea');
-
-    submitBtn.addEventListener('click', async () => {
-        if (selectedRating === 0) {
-            responseDiv.innerHTML = "❌ Please select a rating (1–5 stars).";
-            responseDiv.className = "response error";
-            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 3000);
-            return;
+        function resetForm() {
+            form.reset();
+            form.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
         }
-
-        const name = document.getElementById('name').value.trim();
-        const comment = document.getElementById('comment').value.trim();
-        const payload = { name, rating: selectedRating, comment };
-
-        responseDiv.innerHTML = "Sending...";
-        responseDiv.className = "response";
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',   // same as suggestions page
-                body: JSON.stringify(payload)
-            });
-            responseDiv.innerHTML = "✅ Thank you for your feedback!";
-            responseDiv.className = "response success";
-            // reset form
-            document.getElementById('name').value = '';
-            document.getElementById('comment').value = '';
-            selectedRating = 0;
-            stars.forEach(s => s.classList.remove('selected'));
-            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
-        } catch (err) {
-            console.error(err);
-            responseDiv.innerHTML = "❌ Submission failed. Network error. Check console.";
-            responseDiv.className = "response error";
-        }
-    });
-</script>
+    </script>
 </body>
 </html>

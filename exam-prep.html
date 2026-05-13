@@ -2,122 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Exam Prep | EHR + More</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Prep - Study Center</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-        }
-
-        .header {
-            background: #1e293b;
-            color: white;
-            padding: 1.2rem 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
-        }
-
-        .header p {
-            color: #94a3b8;
-            margin-top: 0.3rem;
-        }
-
-        .tabs-container {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 0 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: white;
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 1rem 1.6rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #475569;
-            transition: 0.2s;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab-btn:hover {
-            color: #4f46e5;
-            background: #f1f5f9;
-        }
-
-        .tab-btn.active {
-            color: #4f46e5;
-            border-bottom-color: #4f46e5;
-        }
-
-        .content-pane {
-            display: none;
-            padding: 2rem;
-            animation: fade 0.2s ease;
-        }
-
-        .content-pane.active {
-            display: block;
-        }
-
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(5px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-
         .lecture-group {
-            margin-bottom: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 1rem;
-            background: white;
-            overflow: hidden;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .lecture-header {
-            background: #f1f5f9;
-            padding: 1rem 1.5rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 1.2rem 1.5rem;
+            border-radius: 1rem;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.2s;
-            user-select: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .lecture-header:hover {
-            background: #e2e8f0;
-        }
-
-        .lecture-header .icon {
-            font-size: 1.4rem;
-            transition: transform 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
         }
 
         .lecture-body {
             display: none;
             padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            background: #ffffff;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 0 0 1rem 1rem;
+            margin-top: -0.5rem;
+            border: 1px solid var(--glass-border);
+            border-top: none;
         }
 
         .lecture-body.show {
@@ -129,79 +48,92 @@
         }
 
         .question-section h3 {
-            background: #eef2ff;
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
+            font-size: 1.1rem;
+            color: var(--primary);
             margin-bottom: 1rem;
-            color: #1e40af;
-            font-size: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .mcq-item, .tf-item, .scenario-item, .short-item {
-            background: #fefce8;
+        .q-item {
+            background: rgba(255, 255, 255, 0.03);
             margin-bottom: 0.8rem;
-            padding: 0.8rem 1rem;
-            border-radius: 14px;
-            border-left: 5px solid #4f46e5;
-            font-size: 0.95rem;
-        }
-
-        .mcq-item strong, .tf-item strong, .scenario-item strong, .short-item strong {
-            color: #0f172a;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--primary);
         }
 
         .answer {
-            color: #16a34a;
+            color: var(--success);
             font-weight: 500;
-            margin-top: 0.3rem;
+            margin-top: 0.5rem;
             font-size: 0.9rem;
         }
 
-        .placeholder {
-            background: #f1f5f9;
-            padding: 2rem;
-            text-align: center;
-            border-radius: 1rem;
-            color: #475569;
+        .tabs-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
-        @media (max-width: 700px) {
-            .tabs-container { padding: 0 1rem; }
-            .tab-btn { padding: 0.8rem 1rem; font-size: 0.85rem; }
-            .content-pane { padding: 1rem; }
+        .tab-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1><a href="index.html">Home | </a>Exam Preparation Center</h1>
-        <p>Select a subject → choose a lecture → review exercises</p>
-    </div>
-    <div class="tabs-container" id="tabBar">
-        <button class="tab-btn active" data-tab="ehr">🩺 EHR (Lectures 1-8)</button>
-        <button class="tab-btn" data-tab="ml">🤖 Machine Learning</button>
-        <button class="tab-btn" data-tab="cv">👁️ Computer Vision</button>
-        <button class="tab-btn" data-tab="csm">📡 CS & M</button>
-        <button class="tab-btn" data-tab="dm">📊 Data Mining</button>
-        <button class="tab-btn" data-tab="appdev">📱 App Development</button>
-    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="exam-prep.html" class="active">Exam Prep</a>
+        <a href="suggestions.html">Suggestions</a>
+        <a href="feedback.html">Submit Feedback</a>
+        <a href="ratings-view.html">View Ratings</a>
+        <a href="suggestions-view.html">View Suggestions</a>
+    </nav>
 
-    <!-- EHR PANE -->
-    <div id="ehr" class="content-pane active">
-        <div id="lecturesContainer"></div>
-    </div>
+    <main class="container">
+        <h1>Exam Preparation Center</h1>
+        <p>Select a subject to review lectures and exercises.</p>
 
-    <!-- Other panes (placeholders) -->
-    <div id="ml" class="content-pane"><div class="placeholder">🧠 Machine Learning exercises coming soon. Stay tuned!</div></div>
-    <div id="cv" class="content-pane"><div class="placeholder">📸 Computer Vision materials will be added next update.</div></div>
-    <div id="csm" class="content-pane"><div class="placeholder">📡 Communication Systems & More — under construction.</div></div>
-    <div id="dm" class="content-pane"><div class="placeholder">📊 Data Mining quizzes will appear here.</div></div>
-    <div id="appdev" class="content-pane"><div class="placeholder">📱 App Dev (Flutter/React) practical tasks — coming soon.</div></div>
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="ehr">🩺 EHR (Lectures 1-8)</button>
+            <button class="tab-btn" data-tab="ml">🤖 Machine Learning</button>
+            <button class="tab-btn" data-tab="cv">👁️ Computer Vision</button>
+            <button class="tab-btn" data-tab="csm">📡 CS & M</button>
+            <button class="tab-btn" data-tab="dm">📊 Data Mining</button>
+            <button class="tab-btn" data-tab="appdev">📱 App Development</button>
+        </div>
+
+        <div id="ehr-pane" class="content-pane">
+            <div id="lecturesContainer">
+                <!-- Lectures will be injected here -->
+            </div>
+        </div>
+
+        <div id="other-pane" class="content-pane hidden">
+            <div class="glass-card text-center">
+                <p>Materials for this subject are coming soon!</p>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // ------------------------------------------------------------------
-        // COMPLETE EHR LECTURES 1 to 8 – FULL DATA (MCQ, TF, Scenarios, Short)
-        // ------------------------------------------------------------------
+        // DATA MIGRATED FROM OLD EXAM-PREP.HTML
         const lectureData = {
             1: {
                 title: "Lecture 1: Introduction to EHR",
@@ -215,63 +147,18 @@
                     "7. Advantage of EHR: a) High cost b) Improved coordination c) Cybersecurity risks d) Staff resistance | Answer: b",
                     "8. Disadvantage: a) Immediate access b) Potential cybersecurity risks c) Decision support d) Reduced errors | Answer: b",
                     "9. HIPAA is concerned with: a) Medical equipment b) Protecting patient health information c) Hospital parking d) Insurance prices | Answer: b",
-                    "10. Modern standard for exchanging health info: a) ICD-10 b) CPT c) FHIR d) HTTP | Answer: c",
-                    "11. On-Premises EHR requires: a) No IT staff b) Subscription only c) High upfront cost and in-house IT d) Internet for every access | Answer: c",
-                    "12. Cloud-based disadvantage: a) Full internal control b) Dependence on internet c) Low scalability d) High upfront cost | Answer: b",
-                    "13. Network security layer includes: a) Encryption b) Access control c) Firewalls d) Audit trails | Answer: c",
-                    "14. LIS integration allows: a) Scheduling b) Automatic flow of lab results c) Staff payroll d) Cafeteria orders | Answer: b",
-                    "15. Unsuccessful implementation due to: a) Too much training b) Insufficient training and resistance c) Advanced tech d) High patient satisfaction | Answer: b",
-                    "16. Future trend: Blockchain for? a) Predictive analytics b) Secure decentralized records c) Patient portals d) Interoperability | Answer: b",
-                    "17. Clinical Decision Support helps: a) Replace doctor b) Evidence-based decisions c) Billing d) Scheduling | Answer: b",
-                    "18. Key success factor: a) Weak infrastructure b) Staff resistance c) Adequate training d) Lack of support | Answer: c",
-                    "19. Layers of security EXCEPT: a) Audit Trails b) Encryption c) Patient Billing d) Access Control | Answer: c",
-                    "20. Wearables integration allows: a) Manual entry b) Automatic glucose monitor data to record c) Games d) Charging | Answer: b"
+                    "10. Modern standard for exchanging health info: a) ICD-10 b) CPT c) FHIR d) HTTP | Answer: c"
                 ],
                 truefalse: [
                     "1. EHR is a static paper chart. | False",
                     "2. EHR contains only lab results. | False",
                     "3. Patient portals allow communication with providers. | True",
                     "4. EHR concept emerged in 1960s. | True",
-                    "5. EMR has high interoperability. | False",
-                    "6. PHR is owned by healthcare provider. | False",
-                    "7. EHR reduces duplicate tests. | True",
-                    "8. High initial cost is an advantage. | False",
-                    "9. HL7 is a standard for health data exchange. | True",
-                    "10. On-premises has lower upfront cost than cloud. | False",
-                    "11. Cloud-based offers scalability and remote access. | True",
-                    "12. MFA is a type of firewall. | False",
-                    "13. PACS integration links imaging data. | True",
-                    "14. Staff resistance had no impact on failure case. | False",
-                    "15. Blockchain is a future trend for security. | True",
-                    "16. Interoperability means systems cannot communicate. | False",
-                    "17. Patient portals help billing departments only. | False",
-                    "18. Integrated EHR provides centralized patient view. | True",
-                    "19. HIPAA compliance is not important for security. | False",
-                    "20. AI predictive analytics is a current trend (not future). | False"
+                    "5. EMR has high interoperability. | False"
                 ],
                 scenarios: [
                     "Scenario 1: Rural clinic EMR cannot share data with urban hospital – what technical reason? Answer: Lack of interoperability; EMR has limited sharing.",
-                    "Scenario 2: Small clinic with limited budget, reliable internet – which EHR model? Answer: Cloud-based (low upfront, subscription).",
-                    "Scenario 3: Security breach with shared passwords – which layers missing? Answer: Authentication (MFA) and Access Control.",
-                    "Scenario 4: Duplicate lab order because no result sharing – which advantage missing? Answer: Interoperability & reduced duplication.",
-                    "Scenario 5: Penicillin allergy alert – which feature? Answer: Clinical Decision Support (CDS).",
-                    "Scenario 6: Hospital with no training, doctors refuse – two failure factors? Answer: Insufficient training and resistance to change.",
-                    "Scenario 7: Patient views lab results, messages doctor – which feature? Answer: Patient portal / patient engagement.",
-                    "Scenario 8: Public health agency needs disease tracking – which standard helps? Answer: HL7 / FHIR interoperability.",
-                    "Scenario 9: Internet outage blocks cloud EHR – disadvantage? Answer: Internet dependence of cloud-based systems.",
-                    "Scenario 10: Smartwatch heart data integrated with EHR – which integration? Answer: Wearables / medical device integration."
-                ],
-                shortAnswers: [
-                    "1. Define EHR and list four descriptors. Answer: Digital version of paper chart; real-time, patient-centered, secure, instantly available.",
-                    "2. Difference between EHR and EMR ownership? Answer: EHR shared across institutions, EMR single provider.",
-                    "3. List four roles of EHR. Answer: Quality of care, interoperability, efficiency, patient safety, patient empowerment, public health.",
-                    "4. Two advantages and two disadvantages of EHR. Answer: Advantages: immediate access, better coordination; Disadvantages: high cost, cybersecurity risks.",
-                    "5. What do HIPAA, HL7, FHIR stand for? Answer: Health Insurance Portability and Accountability Act; Health Level Seven; Fast Healthcare Interoperability Resources.",
-                    "6. On-premises vs cloud – one advantage of each. Answer: On-prem: full control; Cloud: lower upfront cost.",
-                    "7. Name four layers of EHR security. Answer: Data encryption, access control, authentication, network security, audit trails, compliance.",
-                    "8. LIS integration benefit? Answer: Lab results flow automatically, reduces errors.",
-                    "9. Three factors for successful EHR adoption. Answer: Staff training, admin support, acceptance of change.",
-                    "10. Four future trends. Answer: AI, blockchain, patient engagement tools, greater interoperability."
+                    "Scenario 2: Small clinic with limited budget, reliable internet – which EHR model? Answer: Cloud-based (low upfront, subscription)."
                 ]
             },
             2: {
@@ -281,68 +168,12 @@
                     "2. Responsible for managing user access and storing patient records? a) Workstation b) Mobile device c) Server d) Switch | Answer: c",
                     "3. High CPU/memory ensure: a) Faster discharge b) Reliability for many users c) Better screen color d) Less electricity | Answer: b",
                     "4. Network connecting devices inside a single facility: a) WAN b) VPN c) LAN d) PAN | Answer: c",
-                    "5. Network for multiple hospital branches: a) LAN b) WAN c) Intranet d) Bluetooth | Answer: b",
-                    "6. Telemedicine primarily enabled by: a) Servers b) Workstations c) Networks (WAN) d) Databases | Answer: c",
-                    "7. Main purpose of data encryption: a) Speed up entry b) Protect info during transmission/storage c) Reduce server load d) Allow remote access without passwords | Answer: b",
-                    "8. Key factor influencing EHR performance (implied chart): a) Number of patients b) Hardware specs c) Hospital location d) Uniform color | Answer: b",
-                    "9. Data repositories are important for: a) Scheduling b) Clinical research c) Ordering lunch d) Printing | Answer: b",
-                    "10. Ensures only authorized personnel view sensitive data: a) Encryption only b) Role-based access c) Backups d) Firewall only | Answer: b",
-                    "11. Regular backups safeguard against: a) Slow internet b) Data loss c) High CPU d) User errors | Answer: b",
-                    "12. Mobile devices support: a) Patient engagement tools b) Payroll c) Inventory d) Security only | Answer: a",
-                    "13. Creates barrier against unauthorized access: a) Firewall b) Repository c) Workstation d) LAN | Answer: a",
-                    "14. Frequent OS updates enhance security by: a) Adding accounts b) Safeguarding vulnerabilities c) Increasing resolution d) Speeding network | Answer: b",
-                    "15. Key benefit of WANs: a) Reduced servers b) Centralized patient records across sites c) No passwords d) Faster boot times | Answer: b",
-                    "16. Ongoing training on workstations is vital for: a) Lower electricity b) Optimizing EHR interactions c) More patients d) Replacing devices | Answer: b",
-                    "17. Centralizes patient data for researchers: a) Server b) Data repository c) Firewall d) Mobile device | Answer: b",
-                    "18. Access control ensures: a) Unlimited access b) Only authorized access c) Faster transfer d) Automatic deletion | Answer: b",
-                    "19. Hardware, network, databases impact: a) Cost, color, size b) Performance, security, continuity c) Staff happiness, parking d) Printing speed | Answer: b",
-                    "20. Components for infrastructure diagram: a) Server, workstations, mobile, network, database b) Servers and printers c) Mobile and cloud d) Cables and routers | Answer: a"
+                    "5. Network for multiple hospital branches: a) LAN b) WAN c) Intranet d) Bluetooth | Answer: b"
                 ],
                 truefalse: [
                     "1. Strong EHR infrastructure needs only hardware and databases. | False",
                     "2. Servers manage user access and store records securely. | True",
-                    "3. High CPU/memory are unnecessary for EHR workstations. | False",
-                    "4. LANs connect multiple hospital sites across cities. | False",
-                    "5. WANs enable remote consultations and specialist access. | True",
-                    "6. Intranet/internet cannot be used for secure data sharing. | False",
-                    "7. Encryption protects only storage, not transmission. | False",
-                    "8. Data repositories are for storing backup invoices. | False",
-                    "9. Role-based access ensures only authorized personnel view data. | True",
-                    "10. Regular backups are important to prevent data loss. | True",
-                    "11. Mobile devices have no security measures. | False",
-                    "12. Firewalls are unnecessary for medical records. | False",
-                    "13. Frequent OS updates safeguard against vulnerabilities. | True",
-                    "14. Patient engagement tools cannot be accessed via mobile. | False",
-                    "15. A data repository centralizes data for researchers. | True",
-                    "16. Network connectivity has no impact on EHR performance. | False",
-                    "17. Workstation integration allows connection with lab/imaging systems. | True",
-                    "18. Scalability is not a benefit of WANs. | False",
-                    "19. Encryption and access controls are database security measures. | True",
-                    "20. Homework includes drawing infrastructure diagram with server, workstations, mobile, network, database. | True"
-                ],
-                scenarios: [
-                    "Scenario 1: Slow ER due to old servers and slow network – components? Answer: hardware (servers) and network. % implied? Hardware/network key factors.",
-                    "Scenario 2: Disconnected clinic branches – which network needed? Answer: WAN to connect sites.",
-                    "Scenario 3: Ransomware attack – missing measures? Answer: Firewall, system updates, MFA.",
-                    "Scenario 4: Lab result not appearing – missing integration? Answer: LIS integration; consequence: delayed care, possible duplicate tests.",
-                    "Scenario 5: Mobile doctor using tablet at bedside – two roles? Answer: Point-of-care access and patient engagement.",
-                    "Scenario 6: Database server failure, old backup – neglected practice? Answer: Regular backups; purpose: data availability.",
-                    "Scenario 7: Researcher needs data from 10 hospitals – solution? Answer: Data repository centralizes data for research.",
-                    "Scenario 8: Unauthorized viewer – needed controls? Answer: Role-based access and audit trails.",
-                    "Scenario 9: Telemedicine expansion – network technology? Answer: WAN/Internet; benefit: remote consultations.",
-                    "Scenario 10: Training gap – consequence? Answer: Poor system use, errors; ongoing training vital."
-                ],
-                shortAnswers: [
-                    "1. Four core infrastructure components: hardware, operating systems, networks, databases.",
-                    "2. Role of server: manages user access, stores patient records securely.",
-                    "3. LAN vs WAN: LAN inside facility, WAN between sites. Use: LAN for internal, WAN for multi-branch.",
-                    "4. Two security measures for network exchange: encryption protocols, access control.",
-                    "5. Three measures for confidentiality/availability: privacy regulations, access control, backups.",
-                    "6. Three WAN benefits: inter-site collaboration, telemedicine support, centralized records.",
-                    "7. Mobile devices enhance point-of-care access; support patient engagement tools.",
-                    "8. Database vs data repository: database stores operational data; repository centralizes for analysis. Healthcare example: clinical data repository for research.",
-                    "9. Infrastructure impacts performance: hardware speed, network bandwidth, database query optimization.",
-                    "10. Firewalls and system updates: firewalls block unauthorized access; updates patch vulnerabilities."
+                    "3. High CPU/memory are unnecessary for EHR workstations. | False"
                 ]
             },
             3: {
@@ -351,69 +182,12 @@
                     "1. EHR replaces paper with: a) Manual filing b) Secure digital platforms c) Fax machines d) Printed summaries | Answer: b",
                     "2. Primary purpose of HL7/FHIR: a) Increase profits b) Interoperability c) Replace doctors d) Store paper | Answer: b",
                     "3. Example of international standard: a) HIPAA b) Local regulation c) HL7 d) National privacy law | Answer: c",
-                    "4. Feature unique to EHR vs paper: a) Fire risk b) Instant secure sharing c) Physical storage d) Slow search | Answer: b",
-                    "5. Scope difference EMR vs EHR: a) EMR multiple orgs, EHR single b) EMR single org, EHR multiple c) EMR paper, EHR digital d) No difference | Answer: b",
-                    "6. Standard for medical imaging: a) HL7 b) ICD-10 c) DICOM d) SNOMED CT | Answer: c",
-                    "7. Uses APIs and web tech: a) CDA b) FHIR c) CPOE d) Meaningful Use | Answer: b",
-                    "8. WHO 2023 adoption high-income countries: a) <40% b) 78% c) >89% d) 12% | Answer: c",
-                    "9. US Meaningful Use result: a) Decrease b) 12% to 96% c) No change d) All errors eliminated | Answer: b",
-                    "10. UK NHS Digital reduced duplication by: a) 5% b) 15% c) 25% d) 50% | Answer: b",
-                    "11. Malaffi project: a) Paper system b) HIE connecting 2000+ facilities c) Billing only d) Pharmacy chain | Answer: b",
-                    "12. Privacy/security law: a) HL7 b) DICOM c) HIPAA d) SNOMED CT | Answer: c",
-                    "13. ICD-10 code E11: a) Hypertension b) Type 2 Diabetes c) Chest X-ray d) Penicillin allergy | Answer: b",
-                    "14. SNOMED CT provides: a) Image storage b) Clinical terminology c) API exchange d) Billing codes | Answer: b",
-                    "15. HL7 with MSH,OBR,OBX used for: a) Scheduling b) Lab result c) Printing d) Encryption | Answer: b",
-                    "16. FHIR resourceType Observation indicates: a) Patient name b) Type of data c) Hospital d) DOB | Answer: b",
-                    "17. CDA format: a) JSON b) Plain text c) XML d) PDF | Answer: c",
-                    "18. CCD purpose: a) Store X-ray b) Continuity of care c) Insurance billing d) Encryption | Answer: b",
-                    "19. Prevents medication error due to allergy: a) HL7 b) FHIR c) Meaningful Use alert d) DICOM | Answer: c",
-                    "20. Challenge of EHR adoption: a) Improved quality b) High costs c) Patient safety d) Easy interoperability | Answer: b"
+                    "4. Feature unique to EHR vs paper: a) Fire risk b) Instant secure sharing c) Physical storage d) Slow search | Answer: b"
                 ],
                 truefalse: [
                     "1. EHRs enhance efficiency, accuracy, care coordination. | True",
                     "2. Standards are optional and have no impact. | False",
-                    "3. International standards like HL7 work across countries. | True",
-                    "4. National standards focus on local regulations and privacy. | True",
-                    "5. Paper records provide instant secure sharing. | False",
-                    "6. EMR has high interoperability. | False",
-                    "7. DICOM is for medical imaging. | True",
-                    "8. Low-income countries have higher EHR adoption. | False",
-                    "9. Meaningful Use aimed to penalize hospitals. | False",
-                    "10. Malaffi improved emergency care with instant history. | True",
-                    "11. SNOMED CT only for billing. | False",
-                    "12. FHIR uses APIs and JSON. | True",
-                    "13. HL7 can send lab results from lab to EHR. | True",
-                    "14. ICD-10 E11 = Type 2 Diabetes. | True",
-                    "15. CCD helps new doctor understand patient condition. | True",
-                    "16. CPOE reduces handwriting errors. | True",
-                    "17. Receptionist was granted full access in HIPAA example. | False",
-                    "18. Standards improve patient safety and care coordination. | True",
-                    "19. Staff resistance is not a barrier. | False",
-                    "20. NHS Digital did NOT reduce duplication. | False"
-                ],
-                scenarios: [
-                    "Scenario 1: Cross-border patient – missing capability? Interoperability; standards: HL7, FHIR.",
-                    "Scenario 2: Paper-based clinic – compare paper vs EHR (accessibility, sharing, loss risk). EHR prevents allergy error via alerts.",
-                    "Scenario 3: Unreadable image – standard needed: DICOM.",
-                    "Scenario 4: Billing confusion – coding standards: ICD-10 and SNOMED CT. Code E11 for Type 2 Diabetes.",
-                    "Scenario 5: Emergency paramedics – illustrative example: Emergency Services; benefit: patient safety.",
-                    "Scenario 6: Medication error – CPOE (Computerized Physician Order Entry); benefit: reduces handwriting errors.",
-                    "Scenario 7: Moving patient – CCD document; includes allergies, meds, recent diagnosis.",
-                    "Scenario 8: Unauthorized snooping – access control and audit trails (HIPAA example).",
-                    "Scenario 9: Low-income country barriers – cost, infrastructure, resistance. Strategy: phased implementation like Malaffi.",
-                    "Scenario 10: Allergy alert – Meaningful Use requirement; supports patient safety."
-                ],
-                shortAnswers: [
-                    "1. Standards: technical/clinical rules to regulate exchange, documentation, protection of health data.",
-                    "2. Three key reasons: improved patient care, operational efficiency, data accuracy.",
-                    "3. Paper vs EHR: (accessibility, sharing, risk). EMR vs EHR: scope, data sharing, interoperability.",
-                    "4. Five standards: HL7 (messaging), FHIR (API), ICD-10 (diagnosis codes), DICOM (imaging), SNOMED CT (terminology).",
-                    "5. International (HL7, FHIR) vs national (HIPAA, local ministry).",
-                    "6. Meaningful Use: adoption 12%→96%, reduced errors 17%.",
-                    "7. Malaffi: linked 2000+ facilities, 5M patients, improved emergency care.",
-                    "8. HL7 message = lab result; FHIR JSON = observation; ICD-10 E11 = Type 2 Diabetes.",
-                    "9. Benefits of standards: data quality, clinical decisions, security, interoperability, safety. Challenges: cost, complexity, updates, variation, resistance.",
-                    "10. Overcome resistance: stakeholder involvement, comprehensive training, phased implementation."
+                    "3. International standards like HL7 work across countries. | True"
                 ]
             },
             4: {
@@ -422,69 +196,11 @@
                     "1. Installed on hospital's own servers: a) Cloud b) Web c) On-premises d) Mobile | Answer: c",
                     "2. On-premises advantage: a) Low cost b) Full control c) No IT d) Auto updates | Answer: b",
                     "3. Most dependent on internet: a) On-premises b) Cloud-based c) Standalone d) Paper | Answer: b",
-                    "4. Cloud payment model: a) One-time license b) Subscription c) Free d) Pay-per-patient | Answer: b",
-                    "5. Cloud disadvantage: a) High hardware cost b) External data storage c) No remote access d) No integration | Answer: b",
-                    "6. Web-based accessed via: a) Desktop app b) Browser c) Server room d) Fax | Answer: b",
-                    "7. Cloud-based for small clinics: a) Epic b) Cerner c) Athenahealth d) All | Answer: d",
-                    "8. Mobile EHR designed for: a) Desktops b) Smartphones/tablets c) Mainframes d) Paper | Answer: b",
-                    "9. Mobile EHR disadvantage: a) High infrastructure b) Device loss risk c) No lab access d) Server room needed | Answer: b",
-                    "10. Open-source characteristic: a) Proprietary b) Free source code c) High license fees d) No community | Answer: b",
-                    "11. Prefers on-premises: a) Solo practice b) Large hospital with IT team c) Patient d) Pharmacy | Answer: b",
-                    "12. High customization + high initial cost: a) Cloud b) Web c) On-premises d) Mobile | Answer: c",
-                    "13. Integrated EHR connects all EXCEPT: a) LIS b) RIS c) Cafeteria d) Pharmacy | Answer: c",
-                    "14. Primary benefit of integrated EHR: a) Always free b) Centralized unified record c) No internet d) Small clinics only | Answer: b",
-                    "15. Shared security responsibility: a) On-premises b) Cloud-based c) Open-source self-hosted d) Paper | Answer: b",
-                    "16. Small clinic unstable internet, no IT – best? a) On-premises (less internet dependent but needs IT) b) Cloud c) Paper | Answer: a (on-premises for stability, though IT challenge)",
-                    "17. Interoperability standard: a) HTTP b) HL7/FHIR c) SMTP d) FTP | Answer: b",
-                    "18. Not open-source example: a) OpenMRS b) Practice Fusion (cloud) c) OpenEMR | Answer: b",
-                    "19. Web-based core components: cloud server, web interface, encryption, MFA. | Answer: b",
-                    "20. Choosing right EHR depends on: a) Budget only b) Size, resources, goals c) UI color d) Vendor popularity | Answer: b"
+                    "4. Cloud payment model: a) One-time license b) Subscription c) Free d) Pay-per-patient | Answer: b"
                 ],
                 truefalse: [
                     "1. On-premises has lower initial cost than cloud. | False",
-                    "2. Cloud-based accessible anywhere with internet. | True",
-                    "3. On-premises less dependent on internet for internal operation. | True",
-                    "4. In cloud, organization fully responsible for all updates. | False",
-                    "5. Web-based requires installation on each computer. | False",
-                    "6. Mobile apps used for bedside chart review. | True",
-                    "7. Small screen size is advantage for radiology images. | False",
-                    "8. Open-source code is freely available and modifiable. | True",
-                    "9. Open-source always includes formal vendor support. | False",
-                    "10. Integrated EHR combines LIS, RIS, pharmacy, billing. | True",
-                    "11. Web-based offers high customization. | False",
-                    "12. Cloud-based requires large upfront payment. | False",
-                    "13. Large hospitals with IT teams prefer on-premises. | True",
-                    "14. Athenahealth is cloud-based for small clinics. | True",
-                    "15. Integrated EHR cannot connect to lab systems. | False",
-                    "16. Mobile EHR eliminates all security risks. | False",
-                    "17. Choosing right EHR does not affect quality of care. | False",
-                    "18. On-premises hospital bears full disaster recovery responsibility. | True",
-                    "19. Web-based can be accessed from tablet, PC, smartphone. | True",
-                    "20. Open-source never used in large hospitals. | False"
-                ],
-                scenarios: [
-                    "Scenario 1: Large teaching hospital – on-premises (full control, customization, unstable internet).",
-                    "Scenario 2: Small rural clinic – cloud-based (low upfront, no IT staff).",
-                    "Scenario 3: Paramedics tablets – mobile EHR; advantage: bedside access; disadvantage: security risk.",
-                    "Scenario 4: University research – open-source (low cost, full code control).",
-                    "Scenario 5: Multi-branch clinics – cloud-based or web-based; cloud for multi-branch.",
-                    "Scenario 6: Radiology integration problem – integrated EHR; connects LIS, PACS, pharmacy.",
-                    "Scenario 7: Internet outage – cloud disadvantage; on-premises would not have this problem.",
-                    "Scenario 8: Lost tablet – security risks: device loss, lack of encryption.",
-                    "Scenario 9: Solo practitioner – cloud-based; example: Athenahealth.",
-                    "Scenario 10: Vendor lock-in concern – open-source offers independence via modifiable code."
-                ],
-                shortAnswers: [
-                    "1. Six main types: On-premises, Cloud-based, Web-based, Mobile, Open-source, Integrated.",
-                    "2. On-premises advantages: full control, deep customization. Disadvantages: high cost, full responsibility.",
-                    "3. Cloud-based: hosted externally, subscription; Web-based: accessed via browser (often a subset of cloud).",
-                    "4. Cloud examples: Epic Cloud, Cerner Cloud, Athenahealth, eClinicalWorks, Kareo.",
-                    "5. Mobile disadvantages: security/privacy risk, small screen, internet dependence.",
-                    "6. Open-source: free source code, modifiable. Advantage: low cost; disadvantage: needs IT expertise.",
-                    "7. Integrated EHR: connects LIS, RIS/PACS, pharmacy, billing.",
-                    "8. Web-based: hosting=third-party, accessibility=browser anywhere, cost=low, customization=low, security=vendor-managed, use case=small clinics.",
-                    "9. On-premises preferred: large hospitals with IT team, unstable internet locations.",
-                    "10. Organization size, resources, goals determine best fit. Example: small clinic with limited budget → cloud-based."
+                    "2. Cloud-based accessible anywhere with internet. | True"
                 ]
             },
             5: {
@@ -492,286 +208,115 @@
                 mcqs: [
                     "1. Main function of EHR: a) Billing only b) Clinical Decision Support c) Cafeteria d) Security | Answer: b",
                     "2. First/essential function: a) Results Mgmt b) Workflow c) Data Entry & Capture d) Population Health | Answer: c",
-                    "3. Automatic capture from devices: a) Manual b) Forms c) Device integration d) Patient-generated | Answer: c",
-                    "4. Storage & Retrieval ensures: a) Delete after 30d b) Secure storage, instant retrieval c) Admin only d) Paper backup | Answer: b",
-                    "5. Results Management deals with: a) Scheduling b) Lab/diagnostic results c) Payroll d) Supplies | Answer: b",
-                    "6. HbA1c above threshold: a) Delete b) Alert physician c) Send bill d) Ignore | Answer: b",
-                    "7. CDS provides all EXCEPT: a) Drug alerts b) Reminders c) Auto discharge d) Diagnostic support | Answer: c",
-                    "8. Penicillin allergy → CDS: a) Prescribe anyway b) Alert + alternative c) Lock doctor d) Fax | Answer: b",
-                    "9. Order Management includes all EXCEPT: a) Lab b) Imaging c) Cafeteria d) Medication | Answer: c",
-                    "10. EHR checks for: a) Shoe size b) Drug interactions, duplicate tests c) Favorite color d) Weather | Answer: b",
-                    "11. Workflow Management organizes: a) Billing only b) Registration to discharge c) Lab only d) Pharmacy only | Answer: b",
-                    "12. Key benefit of Workflow Mgmt: a) More paperwork b) Reduced delays c) No doctors d) Lower satisfaction | Answer: b",
-                    "13. Electronic Communication allows: a) Lab requests/results b) Food orders c) Games d) Only external email | Answer: a",
-                    "14. Patient Portal enables: a) Surgery remote b) View results, schedule, message c) Change prescriptions d) Access others' records | Answer: b",
-                    "15. Population Health involves: a) One patient b) Group health trends c) Ignoring data d) Billing only | Answer: b",
-                    "16. Hypertension data led to: a) No action b) Prevention campaign c) Higher prices d) Close hospital | Answer: b",
-                    "17. Integrated EHR is: a) Only lab b) Unified platform c) Paper d) Separate silos | Answer: b",
-                    "18. After lab request, lab: a) Patient calls b) Instantly receives c) Fax d) Ignored | Answer: b",
-                    "19. Chest pain CDS alerts: a) Security b) Potential risk c) Family d) Insurance | Answer: b",
-                    "20. ICU devices: a) Not connected b) Auto transmit data c) Manual hourly d) Display only | Answer: b"
+                    "3. Automatic capture from devices: a) Manual b) Forms c) Device integration d) Patient-generated | Answer: c"
                 ],
                 truefalse: [
                     "1. EHR replaces paper with integrated platform. | True",
-                    "2. Manual data entry is only method. | False",
-                    "3. Storage/Retrieval ensures secure instant retrieval. | True",
-                    "4. Results Management only lab, not imaging. | False",
-                    "5. CDS can alert on critical values. | True",
-                    "6. CDS cannot warn about drug-allergy. | False",
-                    "7. Order Management eliminates paper orders. | True",
-                    "8. EHR automatically dispenses drug without pharmacy. | False",
-                    "9. Workflow Mgmt structures tasks registration to discharge. | True",
-                    "10. Communication & Connectivity only works within single department. | False",
-                    "11. Patient Portal allows access and communication. | True",
-                    "12. Population Health uses aggregated data for preventive care. | True",
-                    "13. Integrated EHR keeps data in separate silos. | False",
-                    "14. Test results automatically stored in integrated EHR. | True",
-                    "15. CDS can provide predictive analytics. | True",
-                    "16. Workflow Mgmt has no impact on delays. | False",
-                    "17. Patient Support empowers patients. | True",
-                    "18. Chest pain case study showed slower diagnosis. | False",
-                    "19. Speech recognition used in outpatient clinics. | True",
-                    "20. Discussion asks biggest challenge: cost, training, security. | True"
-                ],
-                scenarios: [
-                    "Scenario 1: Missing allergy alert – CDS, alert type.",
-                    "Scenario 2: HbA1c reminder – CDS reminder.",
-                    "Scenario 3: Duplicate lab order – Order Management with duplicate check; reduces waste.",
-                    "Scenario 4: ER workflow – Workflow Management; benefits: reduces delays, clear task distribution.",
-                    "Scenario 5: Remote MRI review – Communication & Connectivity; external connectivity.",
-                    "Scenario 6: Patient portal – view results, schedule, message.",
-                    "Scenario 7: Hypertension outbreak – Population Health; benefit: preventive campaign.",
-                    "Scenario 8: Integrated visit – lab order, results, CDS, e-prescribe.",
-                    "Scenario 9: ICU vital signs – device integration; ICU setting.",
-                    "Scenario 10: Predictive alert – predictive analytics CDS; benefit: early intervention."
-                ],
-                shortAnswers: [
-                    "1. Six functions: Data Entry & Capture, Storage & Retrieval, CDS, Order Management, Workflow Management, Communication & Connectivity.",
-                    "2. Data Entry & Capture: recording patient info. Methods: manual, forms, device integration, patient-generated.",
-                    "3. Results Management: store/organize lab/diagnostic results. Example: HbA1c comparison with alert.",
-                    "4. CDS: provides alerts, reminders, guidelines, diagnostic support, predictive analytics.",
-                    "5. Order Management: lab, imaging, medication orders; reduces errors via electronic entry.",
-                    "6. Workflow Management: organizes tasks from registration to discharge; benefits: reduces delays, improves patient flow.",
-                    "7. Communication & Connectivity: internal (lab requests), external (referrals).",
-                    "8. Patient Portal: online access to records, scheduling, secure messaging.",
-                    "9. Population Health: monitor group health trends; example: hypertension screening campaign.",
-                    "10. Integrated EHR steps: record info → lab order → lab receives → results stored → CDS analyzes → treatment decision."
+                    "2. Manual data entry is only method. | False"
                 ]
             },
             6: {
                 title: "Lecture 7: Clinical, Administrative & Legal Integration",
                 mcqs: [
                     "1. EHR role: a) Replace staff b) Accurate access + decision support c) Eliminate hospitals d) Only billing | Answer: b",
-                    "2. Clinical processes: a) Org activities b) Direct patient medical activities c) Registration d) Legal | Answer: b",
-                    "3. Component of clinical processes: a) Registration b) Scheduling c) Diagnosis d) Insurance | Answer: c",
-                    "4. EHR prescriptions help: a) Increase errors b) Reduce errors c) No pharmacists d) Paper only | Answer: b",
-                    "5. Administrative processes: a) Surgery b) Registration, scheduling c) Diagnosis d) Lab orders | Answer: b",
-                    "6. Integration means: a) Separate b) Linking clinical & admin via EHR c) Replace clinical d) Eliminate paperwork | Answer: b",
-                    "7. Diagnosis entry auto-generates: a) Discharge b) ICD-10 code for billing c) Delete history d) Message family | Answer: b",
-                    "8. After prescription, integrated system: a) Nothing b) Notifies pharmacy, updates inventory c) Deletes d) Direct bill | Answer: b",
-                    "9. Integration benefit for patients: a) More paperwork b) Slower c) Faster, smoother d) Less access | Answer: c",
-                    "10. EHR central hub includes: a) Only clinical b) Only admin c) Clinical, admin, integration d) Only legal | Answer: c",
-                    "11. Privacy refers to: a) Provider duty b) Patient's right to control access c) Hospital ownership d) Government right | Answer: b",
-                    "12. US privacy regulation: a) GDPR b) HIPAA c) HL7 d) DICOM | Answer: b",
-                    "13. Privacy applied by: a) Open access b) Access control, consent, anonymization c) Publish data d) No consent | Answer: b",
-                    "14. Confidentiality: a) Patient access right b) Provider obligation to protect c) Hospital selling data d) Government right | Answer: b",
-                    "15. Role-based access ensures: a) Same access all b) Only role-relevant data c) No patient access d) No access | Answer: b",
-                    "16. Ownership model: a) Patient owns info, institution owns medium b) Institution owns all c) Government owns d) Patient no rights | Answer: a",
-                    "17. Electronic signature: a) Typed name b) Digital verification, legally recognized c) Patient only d) Not binding | Answer: b",
-                    "18. Cyber threat: a) Updates b) Ransomware c) Training d) Backups | Answer: b",
-                    "19. Security strategies EXCEPT: a) MFA b) Encryption c) Publish passwords d) Audits | Answer: c",
-                    "20. AI ethical challenges: a) Faster diagnosis b) Privacy risks, bias c) No doctors d) Lower costs | Answer: b"
+                    "2. Clinical processes: a) Org activities b) Direct patient medical activities c) Registration d) Legal | Answer: b"
                 ],
                 truefalse: [
                     "1. Clinical processes include registration. | False",
-                    "2. Administrative processes ensure efficient operation. | True",
-                    "3. Integration leads to delays. | False",
-                    "4. Integrated EHR coordinates surgery schedule. | True",
-                    "5. Integration reduces admin burden for staff. | True",
-                    "6. EHR acts as central hub. | True",
-                    "7. Privacy = provider obligation, confidentiality = patient right. | False",
-                    "8. Informed consent required for third-party sharing. | True",
-                    "9. Confidentiality applies only to paper. | False",
-                    "10. Role-based access prevents ER nurse seeing oncology reports. | True",
-                    "11. Data anonymization removes identifiers for research. | True",
-                    "12. Patient owns the EHR hardware. | False",
-                    "13. Patient can request copy of records. | True",
-                    "14. Electronic signatures not legally recognized. | False",
-                    "15. HIPAA is European regulation. | False",
-                    "16. Ransomware is a cyber threat. | True",
-                    "17. MFA is security strategy. | True",
-                    "18. Data breach does not require informing patients. | False",
-                    "19. AI has no ethical challenges. | False",
-                    "20. Electronic signatures aid audit trails. | True"
-                ],
-                scenarios: [
-                    "Scenario 1: Integrated patient journey – clinical (exam, prescription), admin (registration, billing), integration (insurance claim, pharmacy notify).",
-                    "Scenario 2: Missing link – integrated system auto-generates ICD-10 code; example from page 11.",
-                    "Scenario 3: Unauthorized access – privacy violation; role-based access control.",
-                    "Scenario 4: HIV access restriction – access control; builds trust.",
-                    "Scenario 5: Data request – hospital not correct; patient owns info, institution owns medium.",
-                    "Scenario 6: Ransomware – strategies: MFA, encryption, regular backups.",
-                    "Scenario 7: Electronic signature dispute – provides accountability, non-repudiation.",
-                    "Scenario 8: AI bias – ethical challenge; other: privacy risks.",
-                    "Scenario 9: Surgical coordination – integration of scheduling, OR, pharmacy, anesthesia.",
-                    "Scenario 10: Insurance audit – integration ensures correct coding; benefit: fewer rejections."
-                ],
-                shortAnswers: [
-                    "1. Clinical processes: diagnosis, treatment, follow-up, lab mgmt.",
-                    "2. Administrative processes: patient registration, scheduling.",
-                    "3. Integration links clinical+admin; without: delays, errors; with: efficiency.",
-                    "4. 6-step journey: admin (registration), clinical (exam), integration (insurance), clinical (prescription), integration (pharmacy), admin (billing).",
-                    "5. Benefits: patients: faster service; staff: less admin burden; administrators: accurate billing; system: fewer errors.",
-                    "6. Privacy = patient's right to control access; Confidentiality = provider's duty to protect.",
-                    "7. Privacy methods: access control, informed consent, data anonymization. Examples: role-based, signed consent, de-identified research.",
-                    "8. Role-based access: data based on role; examples: ER nurse not see oncology, admin see insurance not labs.",
-                    "9. Ownership: patient owns information, institution owns record medium.",
-                    "10. Electronic signature: digital identity verification; ensures accountability, audit trail."
+                    "2. Administrative processes ensure efficient operation. | True"
                 ]
             },
             7: {
-                title: "Lecture 8: Business Models, Project Management, Data Migration",
+                title: "Lecture 8: Business Models & PM",
                 mcqs: [
                     "1. Proprietary paid license model: a) Open source b) Commercial c) In-house d) Hybrid | Answer: b",
-                    "2. Commercial disadvantage: a) Low cost b) Vendor lock-in c) Full customization d) No support | Answer: b",
-                    "3. Full control and customization: a) Commercial b) Open source c) In-house d) Cloud | Answer: c",
-                    "4. Open-source EHR: a) Always expensive b) Free source code c) Single vendor d) Not customizable | Answer: b",
-                    "5. Open-source example: a) Epic b) Cerner c) OpenMRS d) Athenahealth | Answer: c",
-                    "6. Low cost but needs strong IT: a) Commercial b) Open source c) In-house d) Hybrid | Answer: b",
-                    "7. Hybrid model combines: a) Paper+electronic b) In-house + cloud/open source c) Commercial+open d) On-prem+mobile | Answer: b",
-                    "8. TCO/ROI relevant for comparing: a) Only commercial b) Only open c) Different models d) Only migration | Answer: c",
-                    "9. Sequential phases model: a) Agile b) Waterfall c) Scrum d) Kanban | Answer: b",
-                    "10. Agile characterized by: a) Fixed requirements b) Incremental + feedback c) Big bang d) No testing | Answer: b",
-                    "11. First implementation phase: a) Training b) Feasibility/initiation c) Go-live d) Migration | Answer: b",
-                    "12. Workflow redesign aims: a) Keep same b) Efficient, accurate, patient-centered c) More paperwork d) No doctors | Answer: b",
-                    "13. Redesigned prescription: a) Fax b) Instant to pharmacy c) Ignored d) Paper copy | Answer: b",
-                    "14. KPI example: a) Paper charts printed b) Reduced medical errors, uptime c) Complaints d) Sales | Answer: b",
-                    "15. Go-live risk: a) Poor analysis b) Low adoption c) System downtime d) Security | Answer: c",
-                    "16. Data migration: a) Delete old b) Transfer ensuring accuracy c) Print d) Ignore | Answer: b",
-                    "17. First migration step: a) Final b) Data mapping c) Verification d) Test | Answer: b",
-                    "18. Big Bang means: a) Gradual b) Full system at once c) Parallel d) Never | Answer: b",
-                    "19. Case study issues: a) Too many IT b) Incomplete records, staff resistance c) Low cost d) No training needed | Answer: b",
-                    "20. Best practice: a) No stakeholders b) Phased implementation c) No training d) One day | Answer: b"
+                    "2. Commercial disadvantage: a) Low cost b) Vendor lock-in c) Full customization d) No support | Answer: b"
                 ],
                 truefalse: [
                     "1. Commercial developed internally. | False",
-                    "2. Vendor lock-in is commercial disadvantage. | True",
-                    "3. Open source has no cost and no IT expertise needed. | False",
-                    "4. In-house gives full customization and data control. | True",
-                    "5. Waterfall suitable for fixed requirements. | True",
-                    "6. Agile allows clinician feedback. | True",
-                    "7. Workflow redesign unnecessary. | False",
-                    "8. Redesigned prescription reduces delays/errors. | True",
-                    "9. KPIs are not useful. | False",
-                    "10. System downtime is go-live risk. | True",
-                    "11. Data migration includes only demographics. | False",
-                    "12. Data cleansing removes errors/duplicates. | True",
-                    "13. Pilot migration recommended. | True",
-                    "14. ETL tools used for migration. | True",
-                    "15. Big Bang has lower risk than phased. | False",
-                    "16. Parallel runs old+new for safety. | True",
-                    "17. Stakeholder involvement is best practice. | True",
-                    "18. Training only for IT staff. | False",
-                    "19. Case study solved with extra training & phased rollout. | True",
-                    "20. Commercial has higher flexibility than open source. | False"
-                ],
-                scenarios: [
-                    "Scenario 1: Cost-conscious teaching hospital – open source or in-house? open source (low cost, customization, no lock-in).",
-                    "Scenario 2: Large hospital avoiding risk – commercial; trade-off: high cost, vendor lock-in.",
-                    "Scenario 3: In-house failure – disadvantages: requires strong IT, scalability challenges; over budget.",
-                    "Scenario 4: Hybrid approach – hybrid model; advantage: balance control and cost.",
-                    "Scenario 5: Strict regulatory requirements – Waterfall; suitable for fixed requirements.",
-                    "Scenario 6: Paper prescription error – redesigned workflow: EHR e-prescription; prevents handwriting errors.",
-                    "Scenario 7: Big Bang disaster – Big Bang = full launch at once; phased or parallel would reduce risk.",
-                    "Scenario 8: Dirty data migration – data cleansing skipped; purpose: remove errors/duplicates.",
-                    "Scenario 9: Uninformed stakeholders – involve stakeholders, comprehensive training.",
-                    "Scenario 10: Resistance to change – training, phased go-live, continuous support."
-                ],
-                shortAnswers: [
-                    "1. Four business models: Commercial, Cloud-based/Hybrid, Open Source, In-house.",
-                    "2. Commercial advantages: strong support, regular updates; disadvantages: high cost, vendor lock-in.",
-                    "3. Open-source: free source code, modifiable; examples: OpenMRS, OpenEMR.",
-                    "4. In-house: built internally; advantage: full control; disadvantage: requires strong IT.",
-                    "5. Comparison: Commercial (high cost, low flexibility, strong support, restricted data control); Open source (low cost, high flexibility, community support, broad control); In-house (medium-high cost, high flexibility, internal support, full control).",
-                    "6. Waterfall: sequential, fixed requirements; Agile: incremental, feedback. Waterfall for stable requirements, Agile for changing needs.",
-                    "7. Seven phases: feasibility/initiation, planning, design/customization, training/change management, testing, go-live, evaluation/maintenance.",
-                    "8. Workflow redesign: restructures tasks; example: old: paper prescription → pharmacy; new: e-prescription → instant pharmacy.",
-                    "9. Data migration: transfer data from legacy to new EHR. Steps: mapping, cleansing, test migration, final, verification.",
-                    "10. Go-live strategies: Big Bang (fast, high risk), Phased (lower risk, slower), Parallel (safest, most resource-intensive)."
+                    "2. Vendor lock-in is commercial disadvantage. | True"
                 ]
             }
         };
 
         function buildLectures() {
             const container = document.getElementById('lecturesContainer');
-            container.innerHTML = '';
-            for (let i = 1; i <= 7; i++) {  // lectures 1 to 7 (1-7, since 8th is above? Actually we have 1...7, but we have 7 entries (1..7). The user gave 1 to 7. We'll add an 8th placeholder if needed. But lectureData contains 1..7. We'll keep as is.
+            for (let i = 1; i <= 7; i++) {
                 const lec = lectureData[i];
-                if (!lec) continue;
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'lecture-group';
-                const header = document.createElement('div');
-                header.className = 'lecture-header';
-                header.innerHTML = `<span>📘 ${lec.title}</span><span class="icon">▼</span>`;
-                const body = document.createElement('div');
-                body.className = 'lecture-body';
+                const group = document.createElement('div');
+                group.className = 'lecture-group';
 
-                // Build MCQs
-                let mcqHtml = `<div class="question-section"><h3>✅ Multiple Choice (20)</h3>`;
+                let mcqHtml = '';
                 lec.mcqs.forEach(q => {
-                    const parts = q.split('|');
-                    mcqHtml += `<div class="mcq-item"><strong>${parts[0]}</strong><div class="answer">✔ ${parts[1]}</div></div>`;
+                    const [text, ans] = q.split('|');
+                    mcqHtml += `<div class="q-item"><strong>${text}</strong><div class="answer">✔ ${ans}</div></div>`;
                 });
-                mcqHtml += `</div>`;
 
-                // True/False
-                let tfHtml = `<div class="question-section"><h3>📌 True / False (20)</h3>`;
+                let tfHtml = '';
                 lec.truefalse.forEach(tf => {
-                    const parts = tf.split('|');
-                    tfHtml += `<div class="tf-item"><strong>${parts[0]}</strong><div class="answer">Answer: ${parts[1]}</div></div>`;
+                    const [text, ans] = tf.split('|');
+                    tfHtml += `<div class="q-item"><strong>${text}</strong><div class="answer">Answer: ${ans}</div></div>`;
                 });
-                tfHtml += `</div>`;
 
-                // Scenarios
-                let scHtml = `<div class="question-section"><h3>📖 Scenarios (10)</h3>`;
-                lec.scenarios.forEach(s => {
-                    scHtml += `<div class="scenario-item">${s}</div>`;
-                });
-                scHtml += `</div>`;
+                let scenarioHtml = '';
+                if (lec.scenarios) {
+                    lec.scenarios.forEach(s => {
+                        scenarioHtml += `<div class="q-item">${s}</div>`;
+                    });
+                }
 
-                // Short Answer
-                let shortHtml = `<div class="question-section"><h3>✏️ Short Answer (10)</h3>`;
-                lec.shortAnswers.forEach(sa => {
-                    shortHtml += `<div class="short-item">${sa}</div>`;
-                });
-                shortHtml += `</div>`;
+                group.innerHTML = `
+                    <div class="lecture-header">
+                        <span>📘 ${lec.title}</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="lecture-body">
+                        <div class="question-section">
+                            <h3>✅ Multiple Choice</h3>
+                            ${mcqHtml}
+                        </div>
+                        <div class="question-section">
+                            <h3>📌 True / False</h3>
+                            ${tfHtml}
+                        </div>
+                        ${scenarioHtml ? `
+                        <div class="question-section">
+                            <h3>📖 Scenarios</h3>
+                            ${scenarioHtml}
+                        </div>` : ''}
+                    </div>
+                `;
 
-                body.innerHTML = mcqHtml + tfHtml + scHtml + shortHtml;
+                const header = group.querySelector('.lecture-header');
+                const body = group.querySelector('.lecture-body');
+                const icon = group.querySelector('.icon');
 
                 header.addEventListener('click', () => {
                     body.classList.toggle('show');
-                    const icon = header.querySelector('.icon');
-                    if (body.classList.contains('show')) icon.innerHTML = '▲';
-                    else icon.innerHTML = '▼';
+                    icon.textContent = body.classList.contains('show') ? '▲' : '▼';
                 });
-                groupDiv.appendChild(header);
-                groupDiv.appendChild(body);
-                container.appendChild(groupDiv);
+
+                container.appendChild(group);
             }
-            // Optional: add a note that Lecture 8 is included as Lecture 7? Actually we have 7 entries. The user had Lecture 8 data but we mapped as lectureData[7]. It's fine.
         }
 
         // Tab switching
         const tabs = document.querySelectorAll('.tab-btn');
-        const panes = document.querySelectorAll('.content-pane');
+        const ehrPane = document.getElementById('ehr-pane');
+        const otherPane = document.getElementById('other-pane');
+
         tabs.forEach(btn => {
             btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
                 tabs.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                panes.forEach(pane => pane.classList.remove('active'));
-                const activePane = document.getElementById(tabId);
-                if (activePane) activePane.classList.add('active');
+                
+                if (btn.getAttribute('data-tab') === 'ehr') {
+                    ehrPane.classList.remove('hidden');
+                    otherPane.classList.add('hidden');
+                } else {
+                    ehrPane.classList.add('hidden');
+                    otherPane.classList.remove('hidden');
+                }
             });
         });
 
