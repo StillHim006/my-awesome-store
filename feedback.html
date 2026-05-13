@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback | Exam Prep Hub</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='80' text-anchor='middle' dy='.35em' fill='%23FFD966'%3E⭐%3C/text%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
@@ -179,12 +180,13 @@
     </form>
 
     <footer>
-        🧠 Developer: Ansam Kadhum • IMS • CS&IT • University of Basrah
+        🧠 Developer: ALAA THE GREAT • IMS • CS&IT • University of Basrah
     </footer>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-f1HhQJb9Ys97WN_8u6tFLIsEA1zXRzkOHo6q9GgNmCQZ6lB0bIto13WbTxUyJg6K/exec";
+    // === USE THE NEWLY DEPLOYED APPS SCRIPT URL (with CORS support) ===
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg40UvNjP9qVjVYl-o7hlaBG6WXq1HAgKlhozhAlI7tJhnjWcnLPZcLmy7h7SSlOJg/exec";
 
     let selectedRating = 0;
     const stars = document.querySelectorAll('.star');
@@ -223,21 +225,38 @@
         };
 
         try {
-            // IMPORTANT: Do NOT set 'Content-Type' header in no-cors mode
-            await fetch(SCRIPT_URL, {
+            const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                mode: 'cors',   // Now we can read the response!
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            responseDiv.innerHTML = "✅ Thank you for your feedback!";
-            responseDiv.className = "response success";
-            form.reset();
-            selectedRating = 0;
-            stars.forEach(s => s.classList.remove('selected'));
-            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
+
+            const result = await response.json();
+            if (result.success) {
+                responseDiv.innerHTML = "✅ Thank you for your feedback!";
+                responseDiv.className = "response success";
+                form.reset();
+                selectedRating = 0;
+                stars.forEach(s => s.classList.remove('selected'));
+                setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
+            } else {
+                // Show exact error from the server
+                responseDiv.innerHTML = `❌ Server error: ${result.error}`;
+                responseDiv.className = "response error";
+                console.error("Server returned:", result);
+            }
         } catch (err) {
             console.error(err);
-            responseDiv.innerHTML = "❌ Submission failed. Please try again.";
+            let errorMsg = "❌ Submission failed. ";
+            if (err.message.includes("Failed to fetch")) {
+                errorMsg += "Network error – check your internet or the Apps Script URL.";
+            } else if (err.message.includes("CORS")) {
+                errorMsg += "CORS error – make sure the Apps Script is deployed with 'Anyone' access.";
+            } else {
+                errorMsg += err.message;
+            }
+            responseDiv.innerHTML = errorMsg;
             responseDiv.className = "response error";
         } finally {
             submitBtn.disabled = false;
