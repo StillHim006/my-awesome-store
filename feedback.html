@@ -12,74 +12,75 @@
         }
 
         body {
+            background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 20px;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            padding: 2rem;
+        .glass-card {
+            background: rgba(12, 20, 30, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 650px;
+            transition: 0.3s;
         }
 
         h1 {
-            color: #1e293b;
-            margin-bottom: 0.5rem;
+            color: #FFD966;
+            text-align: center;
+            font-size: 2rem;
+            letter-spacing: 1px;
         }
 
-        .sub {
-            color: #475569;
-            margin-bottom: 2rem;
-            border-left: 4px solid #4f46e5;
-            padding-left: 1rem;
+        .subhead {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #9bb8da;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2a3a4a;
         }
 
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .nav-links a {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.3rem 0.8rem;
-            border-radius: 30px;
-            transition: background 0.2s;
-        }
-
-        .nav-links a:hover {
-            background: #e0e7ff;
+        .form-group {
+            margin-bottom: 22px;
         }
 
         label {
-            font-weight: 600;
             display: block;
-            margin-bottom: 0.5rem;
-            color: #1e293b;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #FFDE9E;
         }
 
-        input, textarea {
+        .required-star {
+            color: #ff7b72;
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 1rem;
-            font-family: inherit;
-            font-size: 1rem;
-            margin-bottom: 1.2rem;
+            padding: 12px 14px;
+            background: #0e1a1f;
+            border: 1px solid #ffd96660;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
         }
 
-        .rating-section {
-            margin-bottom: 1.5rem;
+        input:focus, select:focus, textarea:focus {
+            border-color: #FFC857;
+            box-shadow: 0 0 8px rgba(255, 200, 80, 0.3);
         }
 
         .stars {
@@ -87,114 +88,114 @@
             gap: 0.5rem;
             font-size: 2rem;
             cursor: pointer;
-            margin-top: 0.5rem;
+            margin-top: 8px;
         }
-
         .star {
-            color: #cbd5e1;
+            color: #4a5b6e;
             transition: color 0.2s;
         }
-
         .star.selected {
-            color: #fbbf24;
+            color: #FFD966;
         }
 
         button {
-            background-color: #4f46e5;
-            color: white;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(95deg, #FFC857, #FF9F2E);
             border: none;
-            padding: 0.75rem 1.5rem;
             border-radius: 40px;
-            font-weight: 600;
+            font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: 0.2s;
+            margin-top: 10px;
+            color: #1e2a2f;
         }
 
         button:hover {
-            background-color: #4338ca;
+            transform: translateY(-2px);
+            opacity: 0.92;
+            box-shadow: 0 8px 20px rgba(255, 200, 80, 0.3);
         }
 
-        .alert {
-            background: #dcfce7;
-            color: #166534;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .alert.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .footer-link {
-            margin-top: 2rem;
+        .response {
+            margin-top: 20px;
             text-align: center;
-        }
-
-        .footer-link a {
-            display: inline-block;
-            background: #f1f5f9;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            text-decoration: none;
-            color: #1e293b;
+            color: #c3e88d;
             font-weight: 500;
+            min-height: 48px;
         }
 
-        .optional {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-left: 0.5rem;
+        .error-response {
+            color: #ff7b72;
+        }
+
+        .view-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #b4c8ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+            color: #FFD966;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c8aa0;
+            border-top: 1px solid #2a3a4a;
+            padding-top: 16px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="nav-links">
-        <a href="index.html">🏠 Home</a>
-        <a href="exam-prep.html">📖 Exam Prep</a>
-        <a href="suggestions.html">💡 Suggestions</a>
-        <a href="ratings-view.html">⭐ Ratings</a>
-    </div>
-    <h1>📝 We value your feedback</h1>
-    <div class="sub">Rate your experience – it helps us improve!</div>
+<div class="glass-card">
+    <h1>⭐ Rate Your Experience</h1>
+    <div class="subhead">Exam Preparation Hub • Your feedback helps us improve</div>
 
-    <div id="alertMessage" style="display: none;" class="alert"></div>
-
-    <div>
-        <label for="name">Your name <span class="optional">(optional)</span></label>
-        <input type="text" id="name" placeholder="e.g., Ahmed, or leave blank for anonymous">
-    </div>
-
-    <div class="rating-section">
-        <label>Your rating:</label>
-        <div class="stars" id="starContainer">
-            <span class="star" data-value="1">★</span>
-            <span class="star" data-value="2">★</span>
-            <span class="star" data-value="3">★</span>
-            <span class="star" data-value="4">★</span>
-            <span class="star" data-value="5">★</span>
+    <form id="feedbackForm">
+        <div class="form-group">
+            <label>Your Name (optional)</label>
+            <input type="text" id="name" placeholder="e.g., Ahmed, or leave blank">
         </div>
-    </div>
 
-    <div>
-        <label for="comment">Your comment <span class="optional">(optional)</span></label>
-        <textarea id="comment" rows="4" placeholder="Share your thoughts..."></textarea>
-    </div>
+        <div class="form-group">
+            <label>Rating <span class="required-star">*</span></label>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+        </div>
 
-    <button id="submitFeedback">Submit Feedback</button>
+        <div class="form-group">
+            <label>Comment (optional)</label>
+            <textarea id="comment" rows="4" placeholder="Share your thoughts..."></textarea>
+        </div>
 
-    <div class="footer-link">
-        <a href="ratings-view.html">⭐ View all ratings</a>
-    </div>
+        <button type="submit" id="submitBtn">📝 Submit Feedback</button>
+        <div id="responseArea" class="response"></div>
+        <a href="ratings-view.html" class="view-link">⭐ View all ratings →</a>
+    </form>
+
+    <footer>
+        🧠 Developer: Ansam Kadhum • IMS • CS&IT • University of Basrah
+    </footer>
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyavLM1NTgdw-tpjrjSI8uwG3jUlRweI2jrwqI6LZJl9e01gwyOczBx1GC9KvDJAU0/exec"; // replace with your URL
-    let selectedRating = 0;
+    // === REPLACE WITH YOUR GOOGLE APPS SCRIPT URL (from step 1) ===
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWM2T3h-figln9rnrhNSlG7u4YWp5osRbc6hnVnEswTRCRZW1z7kaIJEj4fghs0X-J/exec";
 
+    let selectedRating = 0;
     const stars = document.querySelectorAll('.star');
     stars.forEach(star => {
         star.addEventListener('click', () => {
@@ -207,39 +208,49 @@
         });
     });
 
-    function showAlert(message, isError = false) {
-        const alertDiv = document.getElementById('alertMessage');
-        alertDiv.textContent = message;
-        alertDiv.className = isError ? 'alert error' : 'alert';
-        alertDiv.style.display = 'block';
-        setTimeout(() => {
-            alertDiv.style.display = 'none';
-        }, 3000);
-    }
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const responseDiv = document.getElementById('responseArea');
 
-    document.getElementById('submitFeedback').addEventListener('click', async () => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
         if (selectedRating === 0) {
-            showAlert('Please select a rating (1–5 stars).', true);
+            responseDiv.innerHTML = "❌ Please select a rating (1–5 stars).";
+            responseDiv.classList.add('error-response');
+            setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.classList.remove('error-response'); }, 3000);
             return;
         }
-        const name = document.getElementById('name').value.trim();
-        const comment = document.getElementById('comment').value.trim();
-        const payload = { name, rating: selectedRating, comment };
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending...";
+
+        const payload = {
+            name: document.getElementById('name').value.trim(),
+            rating: selectedRating,
+            comment: document.getElementById('comment').value.trim()
+        };
 
         try {
-            await fetch(APPS_SCRIPT_URL, {
+            await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            showAlert('Thank you for your feedback!', false);
-            document.getElementById('name').value = '';
+            responseDiv.innerHTML = "✅ Thank you for your feedback!";
+            responseDiv.classList.remove('error-response');
+            form.reset();
             selectedRating = 0;
             stars.forEach(s => s.classList.remove('selected'));
-            document.getElementById('comment').value = '';
+            setTimeout(() => { responseDiv.innerHTML = ""; }, 4000);
         } catch (err) {
-            showAlert('Error submitting feedback. Please try again.', true);
+            responseDiv.innerHTML = "❌ Submission failed. Please check your network or try again later.";
+            responseDiv.classList.add('error-response');
+            console.error(err);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "📝 Submit Feedback";
         }
     });
 </script>
