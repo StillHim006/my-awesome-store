@@ -12,33 +12,36 @@
         }
 
         body {
+            background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #eee;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 30px 20px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            padding: 2rem;
+            background: rgba(12, 20, 30, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 28px 24px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
         }
 
         h1 {
-            color: #1e293b;
+            font-size: 2rem;
+            color: #FFD966;
             text-align: center;
-            margin-bottom: 0.5rem;
         }
 
         .sub {
             text-align: center;
-            color: #475569;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 1rem;
+            color: #9bb8da;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #2a3a4a;
+            padding-bottom: 12px;
         }
 
         .nav-links {
@@ -46,12 +49,12 @@
             flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #2a3a4a;
         }
 
         .nav-links a {
-            color: #4f46e5;
+            color: #FFDE9E;
             text-decoration: none;
             font-weight: 500;
             padding: 0.3rem 0.8rem;
@@ -60,65 +63,72 @@
         }
 
         .nav-links a:hover {
-            background: #e0e7ff;
+            background: rgba(255, 215, 0, 0.2);
+            text-decoration: underline;
         }
 
         .toolbar {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 1.5rem;
+            margin-bottom: 24px;
             gap: 1rem;
         }
 
         .toolbar button, .toolbar a {
-            background-color: #4f46e5;
-            color: white;
+            background: linear-gradient(95deg, #FFC857, #FF9F2E);
             border: none;
-            padding: 0.5rem 1.2rem;
+            padding: 10px 22px;
             border-radius: 40px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            color: #1e2a2f;
         }
 
-        .toolbar a {
-            background-color: #64748b;
+        .toolbar button:hover, .toolbar a:hover {
+            transform: translateY(-2px);
+            opacity: 0.92;
+            box-shadow: 0 8px 20px rgba(255, 200, 80, 0.3);
         }
 
         .cards-container {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 24px;
         }
 
         .feedback-card {
-            background: #f8fafc;
-            border-left: 5px solid #4f46e5;
-            border-radius: 1rem;
-            padding: 1.2rem;
-            transition: transform 0.1s;
+            background: rgba(20, 30, 45, 0.7);
+            border-left: 5px solid #FFD966;
+            border-radius: 20px;
+            padding: 20px;
+            transition: 0.2s;
         }
 
         .feedback-card:hover {
+            background: rgba(30, 45, 60, 0.8);
             transform: translateX(5px);
         }
 
         .card-header {
             font-size: 1rem;
             font-weight: bold;
-            color: #4f46e5;
-            margin-bottom: 0.8rem;
+            color: #FFD966;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #FFD96680;
+            padding-bottom: 6px;
         }
 
         .stars-rating {
             color: #fbbf24;
             font-size: 1.2rem;
-            margin: 0.3rem 0;
+            margin: 8px 0;
         }
 
         .row {
-            margin: 0.5rem 0;
+            margin: 8px 0;
             display: flex;
             flex-wrap: wrap;
         }
@@ -126,32 +136,42 @@
         .field-label {
             font-weight: bold;
             min-width: 80px;
-            color: #334155;
+            color: #FFDE9E;
         }
 
         .field-value {
-            color: #1e293b;
+            color: #eef4ff;
             flex: 1;
+            word-break: break-word;
         }
 
         .anonymous {
-            color: #94a3b8;
+            color: #aa8866;
             font-style: italic;
         }
 
         .status-msg {
             text-align: center;
-            padding: 3rem;
-            color: #64748b;
+            padding: 40px;
+            color: #ffb570;
         }
 
         footer {
-            margin-top: 2rem;
+            margin-top: 32px;
             text-align: center;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 1rem;
+            font-size: 0.7rem;
+            color: #6c8aa0;
+            border-top: 1px solid #2a3a4a;
+            padding-top: 20px;
+        }
+
+        a {
+            color: #FFD966;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -167,7 +187,7 @@
     <div class="sub">What our users say about the Exam Prep Hub</div>
 
     <div class="toolbar">
-        <button id="refreshBtn">⟳ Refresh</button>
+        <button id="refreshBtn">⟳ Refresh Data</button>
         <a href="feedback.html">+ Submit Feedback</a>
     </div>
 
@@ -179,7 +199,7 @@
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyavLM1NTgdw-tpjrjSI8uwG3jUlRweI2jrwqI6LZJl9e01gwyOczBx1GC9KvDJAU0/exec"; // replace with your URL
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWM2T3h-figln9rnrhNSlG7u4YWp5osRbc6hnVnEswTRCRZW1z7kaIJEj4fghs0X-J/exec";
 
     function parseCSV(csvText) {
         const rows = [];
