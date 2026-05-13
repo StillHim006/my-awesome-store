@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: radial-gradient(circle at 10% 30%, #0a0f1c, #03060c);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,49 +21,20 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .glass-card {
             background: rgba(12, 20, 30, 0.85);
             backdrop-filter: blur(12px);
             padding: 30px;
             border-radius: 32px;
             border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
             width: 100%;
             max-width: 650px;
         }
-
-        h1 {
-            color: #FFD966;
-            text-align: center;
-            font-size: 2rem;
-        }
-
-        .subhead {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #9bb8da;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a3a4a;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #FFDE9E;
-        }
-
-        .required-star {
-            color: #ff7b72;
-            margin-left: 4px;
-        }
-
+        h1 { color: #FFD966; text-align: center; font-size: 2rem; }
+        .subhead { text-align: center; color: #9bb8da; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid #2a3a4a; }
+        .form-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: #FFDE9E; }
+        .required-star { color: #ff7b72; margin-left: 4px; }
         input, textarea {
             width: 100%;
             padding: 12px 14px;
@@ -75,12 +45,10 @@
             font-size: 0.95rem;
             outline: none;
         }
-
         input:focus, textarea:focus {
             border-color: #FFC857;
             box-shadow: 0 0 8px rgba(255, 200, 80, 0.3);
         }
-
         .stars {
             display: flex;
             gap: 0.5rem;
@@ -88,14 +56,8 @@
             cursor: pointer;
             margin-top: 8px;
         }
-        .star {
-            color: #4a5b6e;
-            transition: color 0.2s;
-        }
-        .star.selected {
-            color: #FFD966;
-        }
-
+        .star { color: #4a5b6e; transition: color 0.2s; }
+        .star.selected { color: #FFD966; }
         button {
             width: 100%;
             padding: 14px;
@@ -108,13 +70,11 @@
             margin-top: 10px;
             color: #1e2a2f;
         }
-
         button:hover {
             transform: translateY(-2px);
             opacity: 0.92;
             box-shadow: 0 8px 20px rgba(255, 200, 80, 0.3);
         }
-
         .response {
             margin-top: 20px;
             text-align: center;
@@ -123,20 +83,14 @@
         }
         .success { color: #c3e88d; }
         .error { color: #ff7b72; }
-
         .view-link {
             display: block;
             text-align: center;
             margin-top: 20px;
             color: #b4c8ff;
             text-decoration: none;
-            font-size: 0.9rem;
         }
-        .view-link:hover {
-            text-decoration: underline;
-            color: #FFD966;
-        }
-
+        .view-link:hover { text-decoration: underline; color: #FFD966; }
         footer {
             margin-top: 30px;
             text-align: center;
@@ -152,12 +106,12 @@
     <h1>⭐ Rate Your Experience</h1>
     <div class="subhead">Exam Preparation Hub • Your feedback helps us improve</div>
 
-    <form id="feedbackForm">
+    <!-- IMPORTANT: Replace action URL with your Apps Script URL -->
+    <form id="feedbackForm" method="POST" action="https://script.google.com/macros/s/AKfycbxCgQiBp0kvgbaitefCPxsGktfql4_cfWDK5l-AN5bO6WyBJXVsm8UAvq5hezJgyyIl/exec" target="hiddenFrame">
         <div class="form-group">
             <label>Your Name (optional)</label>
-            <input type="text" id="name" placeholder="e.g., Ahmed, or leave blank">
+            <input type="text" name="name" placeholder="e.g., Ahmed, or leave blank">
         </div>
-
         <div class="form-group">
             <label>Rating <span class="required-star">*</span></label>
             <div class="stars" id="starContainer">
@@ -167,29 +121,25 @@
                 <span class="star" data-value="4">★</span>
                 <span class="star" data-value="5">★</span>
             </div>
+            <input type="hidden" name="rating" id="ratingInput" value="">
         </div>
-
         <div class="form-group">
             <label>Comment (optional)</label>
-            <textarea id="comment" rows="4" placeholder="Share your thoughts..."></textarea>
+            <textarea name="comment" rows="4" placeholder="Share your thoughts..."></textarea>
         </div>
-
-        <button type="submit" id="submitBtn">📝 Submit Feedback</button>
+        <button type="submit">📝 Submit Feedback</button>
         <div id="responseArea" class="response"></div>
         <a href="ratings-view.html" class="view-link">⭐ View all ratings →</a>
     </form>
-
-    <footer>
-        🧠 Developer: ALAA THE GREAT • IMS • CS&IT • University of Basrah
-    </footer>
+    <iframe name="hiddenFrame" style="display:none"></iframe>
+    <footer>🧠 Developer: Ansam Kadhum • IMS • CS&IT • University of Basrah</footer>
 </div>
 
 <script>
-    // === USE THE NEWLY DEPLOYED APPS SCRIPT URL (with CORS support) ===
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg40UvNjP9qVjVYl-o7hlaBG6WXq1HAgKlhozhAlI7tJhnjWcnLPZcLmy7h7SSlOJg/exec";
-
+    // Star rating logic
     let selectedRating = 0;
     const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('ratingInput');
     stars.forEach(star => {
         star.addEventListener('click', () => {
             selectedRating = parseInt(star.getAttribute('data-value'));
@@ -198,70 +148,31 @@
                 if (val <= selectedRating) s.classList.add('selected');
                 else s.classList.remove('selected');
             });
+            ratingInput.value = selectedRating;
         });
     });
 
     const form = document.getElementById('feedbackForm');
-    const submitBtn = document.getElementById('submitBtn');
     const responseDiv = document.getElementById('responseArea');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
+    form.addEventListener('submit', function(e) {
         if (selectedRating === 0) {
+            e.preventDefault();
             responseDiv.innerHTML = "❌ Please select a rating (1–5 stars).";
             responseDiv.className = "response error";
             setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 3000);
             return;
         }
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Sending...";
-
-        const payload = {
-            name: document.getElementById('name').value.trim(),
-            rating: selectedRating,
-            comment: document.getElementById('comment').value.trim()
-        };
-
-        try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'cors',   // Now we can read the response!
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                responseDiv.innerHTML = "✅ Thank you for your feedback!";
-                responseDiv.className = "response success";
-                form.reset();
-                selectedRating = 0;
-                stars.forEach(s => s.classList.remove('selected'));
-                setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
-            } else {
-                // Show exact error from the server
-                responseDiv.innerHTML = `❌ Server error: ${result.error}`;
-                responseDiv.className = "response error";
-                console.error("Server returned:", result);
-            }
-        } catch (err) {
-            console.error(err);
-            let errorMsg = "❌ Submission failed. ";
-            if (err.message.includes("Failed to fetch")) {
-                errorMsg += "Network error – check your internet or the Apps Script URL.";
-            } else if (err.message.includes("CORS")) {
-                errorMsg += "CORS error – make sure the Apps Script is deployed with 'Anyone' access.";
-            } else {
-                errorMsg += err.message;
-            }
-            responseDiv.innerHTML = errorMsg;
-            responseDiv.className = "response error";
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "📝 Submit Feedback";
-        }
+        responseDiv.innerHTML = "✅ Thank you for your feedback!";
+        responseDiv.className = "response success";
+        setTimeout(() => { responseDiv.innerHTML = ""; responseDiv.className = "response"; }, 4000);
+        // Reset form after submit (the iframe handles the actual POST)
+        setTimeout(() => {
+            form.reset();
+            selectedRating = 0;
+            stars.forEach(s => s.classList.remove('selected'));
+            ratingInput.value = "";
+        }, 100);
     });
 </script>
 </body>
