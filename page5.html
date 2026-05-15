@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Vault - Exam Prep</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="exam-prep.html">Exam Prep</a>
+        <a href="new.html" class="active">Management</a>
+        <a href="suggestions.html">Suggestions</a>
+        <a href="feedback.html">Submit Feedback</a>
+    </nav>
+
+    <main class="container">
+        <div class="glass-card">
+            <div class="header text-center">
+                <h1>📁 File Vault</h1>
+                <p>Upload PDFs, Word, Excel, PPTX, ODT, Images and more.</p>
+            </div>
+
+            <form id="fileUploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="vaultFile">📂 Choose file</label>
+                    <input type="file" id="vaultFile" name="vaultFile" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Upload to Vault</button>
+                <div id="message" class="text-center mt-4" style="min-height: 1.5rem;"></div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="new.html" style="color: var(--text-muted); text-decoration: none;">← Back to Management</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymC8ImcCmFrOXr4huMHJahD70YeD_TsuRL3sUPww7CDoQYu9vaojLqRymXm2M2aQBSRw/exec';
+
+        document.getElementById('fileUploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = 'Uploading...';
+            msgDiv.style.color = 'var(--text)';
+
+            const fileInput = document.getElementById('vaultFile');
+            const data = {
+                type: 'file_vault',
+                fileName: fileInput.files[0] ? fileInput.files[0].name : 'Unknown'
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+                msgDiv.textContent = '✓ File info saved to Vault!';
+                msgDiv.style.color = 'var(--success)';
+                e.target.reset();
+            } catch (error) {
+                msgDiv.textContent = '✕ Error: ' + error.message;
+                msgDiv.style.color = 'var(--error)';
+            }
+        });
+    </script>
+</body>
+</html>
