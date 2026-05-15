@@ -18,7 +18,7 @@
     <main class="container">
         <div class="glass-card">
             <div class="header text-center">
-                <h1>File Vault</h1>
+                <h1>📁 File Vault</h1>
                 <p>Upload PDFs, Word, Excel, PPTX, ODT, Images and more.</p>
             </div>
 
@@ -43,13 +43,24 @@
         document.getElementById('fileUploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const msgDiv = document.getElementById('message');
-            msgDiv.textContent = 'Uploading...';
+            msgDiv.textContent = 'Uploading to Vault... (please wait)';
             msgDiv.style.color = 'var(--text)';
 
             const fileInput = document.getElementById('vaultFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                msgDiv.textContent = 'Please select a file first.';
+                msgDiv.style.color = 'var(--error)';
+                return;
+            }
+
+            const base64 = await toBase64(file);
             const data = {
                 type: 'file_vault',
-                fileName: fileInput.files[0] ? fileInput.files[0].name : 'Unknown'
+                fileData: base64.split(',')[1],
+                fileName: file.name,
+                mimeType: file.type
             };
 
             try {
@@ -58,13 +69,20 @@
                     mode: 'no-cors',
                     body: JSON.stringify(data)
                 });
-                msgDiv.textContent = '✓ File info saved to Vault!';
+                msgDiv.textContent = '✓ File uploaded and linked successfully!';
                 msgDiv.style.color = 'var(--success)';
                 e.target.reset();
             } catch (error) {
                 msgDiv.textContent = '✕ Error: ' + error.message;
                 msgDiv.style.color = 'var(--error)';
             }
+        });
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
         });
     </script>
 </body>
