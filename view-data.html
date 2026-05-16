@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Console - Administrative</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .table-section { margin-bottom: 2rem; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+        .table-header { padding: 1.25rem 1.5rem; background: rgba(255, 255, 255, 0.02); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .data-table th, .data-table td { padding: 0.85rem 1.25rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .data-table th { background: rgba(255, 255, 255, 0.01); font-weight: 600; color: var(--accent); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
+        .data-table tr:hover { background: rgba(59, 130, 246, 0.02); }
+        
+        .action-btn { padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border); background: var(--surface-light); color: var(--text); display: inline-flex; align-items: center; gap: 5px; margin-right: 5px; font-weight: 500; }
+        .action-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
+
+        .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .tab-btn { padding: 0.6rem 1.2rem; background: var(--surface-light); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); cursor: pointer; transition: all 0.2s ease; font-size: 0.85rem; font-weight: 500; }
+        .tab-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        
+        .loading-screen { text-align: center; padding: 6rem; opacity: 0.6; }
+        .empty-state { padding: 4rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="new.html">Hub</a>
+        <a href="#" onclick="logout()" style="color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">Terminate Session</a>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="mb-2">
+            <h1>Administrative Console</h1>
+            <p>Real-time data stream from all system modules.</p>
+        </div>
+
+        <div class="tabs" id="tabs">
+            <button class="tab-btn active" onclick="showTab('QuickFeedback')">Quick Feedback</button>
+            <button class="tab-btn" onclick="showTab('SecureMessages')">Secure Messages</button>
+            <button class="tab-btn" onclick="showTab('MCQCreator')">MCQ Creator</button>
+            <button class="tab-btn" onclick="showTab('ProjectDetails')">2 Truths & 1 Lie</button>
+            <button class="tab-btn" onclick="showTab('FileVault')">Document Vault</button>
+            <button class="tab-btn" onclick="showTab('Feedback')">Feedback</button>
+            <button class="tab-btn" onclick="showTab('Suggestions')">Suggestions</button>
+        </div>
+
+        <div id="loading" class="loading-screen">
+            <p>Establishing secure connection to data server...</p>
+        </div>
+
+        <div id="content"></div>
+    </main>
+
+    <script>
+        if (!localStorage.getItem('admin_token')) window.location.href = 'login.html';
+
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymC8ImcCmFrOXr4huMHJahD70YeD_TsuRL3sUPww7CDoQYu9vaojLqRymXm2M2aQBSRw/exec'; // REPLACE THIS
+        let cachedData = null;
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?type=all_data`);
+                cachedData = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                showTab('QuickFeedback');
+            } catch (err) {
+                document.getElementById('loading').innerHTML = '<p style="color: #ef4444;">Connection Failed. Verify API Endpoint.</p>';
+            }
+        }
+
+        function showTab(sheetName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText === sheetName || (sheetName === 'ProjectDetails' && btn.innerText === '2 Truths & 1 Lie') || (sheetName === 'FileVault' && btn.innerText === 'Document Vault'));
+            });
+
+            const content = document.getElementById('content');
+            const data = cachedData[sheetName];
+
+            if (!data || data.length <= 1) {
+                content.innerHTML = `<div class="glass-card empty-state">Null response from source: ${sheetName}</div>`;
+                return;
+            }
+
+            const headers = data[0];
+            const rows = data.slice(1);
+
+            content.innerHTML = `
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3 style="font-size: 1.1rem;">Data Stream: ${sheetName}</h3>
+                        <div class="badge">${rows.length} Records</div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}<th>Controls</th></tr></thead>
+                            <tbody>
+                                ${rows.map((row, rIdx) => `
+                                    <tr>
+                                        ${row.map(cell => `<td>${formatCell(cell)}</td>`).join('')}
+                                        <td style="white-space: nowrap;">
+                                            <button class="action-btn" onclick="copyRow(${rIdx}, '${sheetName}')">Copy</button>
+                                            ${row.some(c => isLink(c)) ? `<button class="action-btn" onclick="window.open('${getFileLink(row)}')">Open</button>` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatCell(val) {
+            if (isLink(val)) return `<a href="${val}" target="_blank" style="color: var(--primary); text-decoration: none;">Link</a>`;
+            return val;
+        }
+
+        function isLink(val) { return typeof val === 'string' && val.startsWith('http'); }
+        function getFileLink(row) { return row.find(c => isLink(c)) || ''; }
+        function copyRow(rIdx, sName) {
+            navigator.clipboard.writeText(cachedData[sName][rIdx + 1].join(' | '));
+            alert('Record copied to clipboard.');
+        }
+
+        function logout() {
+            localStorage.removeItem('admin_token');
+            window.location.href = 'login.html';
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
