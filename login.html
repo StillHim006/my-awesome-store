@@ -115,6 +115,7 @@
 
                 if (result.success) {
                     localStorage.setItem('admin_token', result.token);
+                    localStorage.setItem('admin_user', username);
                     if (result.role === 'DEV') {
                         window.location.href = 'monitoring.html';
                     } else {

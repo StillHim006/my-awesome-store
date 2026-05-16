@@ -141,8 +141,17 @@
             document.getElementById('userList').innerHTML = html;
         }
 
-        function logout() {
+        async function logout() {
+            const username = localStorage.getItem('admin_user') || 'Unknown';
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'logout', username: username })
+                });
+            } catch (e) {}
+
             localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_user');
             window.location.href = 'login.html';
         }
 
