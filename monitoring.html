@@ -3,125 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Monitor - THE_DEVIL</title>
+    <title>Kernel Control - THE_DEVIL</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --dev-red: #ef4444;
+            --dev-green: #22c55e;
+            --dev-bg: #0a0a0a;
+        }
+
         .monitor-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
+
         .terminal-box {
             background: #000;
             border: 1px solid #1e293b;
             border-radius: 4px;
             padding: 1.5rem;
             font-family: 'Courier New', Courier, monospace;
-            color: #00ff00;
-            font-size: 0.85rem;
-            height: 400px;
+            color: var(--dev-green);
+            font-size: 0.8rem;
+            height: 350px;
             overflow-y: auto;
-            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+            box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.05);
         }
-        .terminal-line { margin-bottom: 0.5rem; }
+
+        .terminal-line { margin-bottom: 0.4rem; opacity: 0.9; }
+
         .stat-card {
             background: var(--surface);
             padding: 1.5rem;
             border-radius: var(--radius);
             border: 1px solid var(--border);
             text-align: center;
+            transition: transform 0.2s;
         }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #ef4444; }
-        .stat-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); }
+        .stat-card:hover { transform: translateY(-2px); border-color: var(--dev-red); }
+        .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--dev-red); letter-spacing: -1px; }
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-top: 0.5rem; }
+
+        /* Tabs System */
+        .tabs { display: flex; gap: 10px; margin: 2rem 0 1rem 0; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .tab-btn { 
+            padding: 0.75rem 1.5rem; 
+            background: transparent; 
+            border: 1px solid var(--border); 
+            color: var(--text-muted); 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { border-color: var(--dev-red); color: var(--text); }
+        .tab-btn.active { background: var(--dev-red); border-color: var(--dev-red); color: white; }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Forms */
+        .add-user-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            background: rgba(255,255,255,0.02);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            border: 1px dashed var(--border);
+        }
+
+        .action-btn-red {
+            padding: 0.4rem 0.8rem;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--dev-red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .action-btn-red:hover { background: var(--dev-red); color: white; }
+
+        .data-table th { color: var(--dev-red); }
     </style>
 </head>
 <body>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="new.html">Hub</a>
-        <a href="view-data.html">Standard Console</a>
-        <a href="#" onclick="logout()" style="color: #ef4444;">Terminate Super Session</a>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; gap: 20px;">
+                <a href="index.html">Home</a>
+                <a href="new.html">Management Hub</a>
+                <a href="view-data.html">Admin Console</a>
+            </div>
+            <a href="#" onclick="logout()" style="color: var(--dev-red); font-weight: 700;">[ TERMINATE SUPER SESSION ]</a>
+        </div>
     </nav>
 
-    <main class="container" style="max-width: 1200px;">
-        <div class="mb-2">
-            <h1 style="color: #ef4444;">System Monitoring Console</h1>
-            <p>Direct Kernel Access: THE_DEVIL</p>
+    <main class="container" style="max-width: 1100px;">
+        <header style="margin-top: 3rem;">
+            <h1 style="color: var(--dev-red); font-size: 2.5rem; margin-bottom: 0.5rem;">KERNEL_CONTROL_V2</h1>
+            <p style="font-family: monospace; letter-spacing: 2px; color: var(--text-muted);">AUTHORIZED_ENTITY: THE_DEVIL</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('health')">SYSTEM_HEALTH</button>
+            <button class="tab-btn" onclick="switchTab('users')">USER_MANAGEMENT</button>
+            <button class="tab-btn" onclick="switchTab('logs')">ACTIVITY_LOGS</button>
         </div>
 
-        <div class="monitor-grid">
+        <!-- TAB: SYSTEM HEALTH -->
+        <div id="health" class="tab-content active">
+            <div class="monitor-grid">
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1rem;">Process Feed</h3>
+                    <div class="terminal-box" id="terminal">
+                        <div class="terminal-line">> SYSTEM_BOOT_SEQUENCE_COMPLETE</div>
+                        <div class="terminal-line">> ENCRYPTED_TUNNEL_ESTABLISHED</div>
+                        <div class="terminal-line">> LISTENING_ON_ALL_DATA_STREAMS...</div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-records">...</div>
+                        <div class="stat-label">Total System Entries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-users">...</div>
+                        <div class="stat-label">Admin Entities</div>
+                    </div>
+                    <div class="stat-card" style="border-style: dashed; opacity: 0.8;">
+                        <div class="stat-value">STABLE</div>
+                        <div class="stat-label">Kernel Health Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: USER MANAGEMENT -->
+        <div id="users" class="tab-content">
             <div class="glass-card">
-                <h3>Live System Logs</h3>
-                <div class="terminal-box" id="terminal">
-                    <div class="terminal-line">> Initializing System Monitor...</div>
-                    <div class="terminal-line">> Connection established: Secure Tunnel 0x666</div>
-                    <div class="terminal-line">> Authenticated: THE_DEVIL</div>
-                    <div class="terminal-line">> Monitoring all data streams...</div>
-                </div>
-            </div>
+                <h3 style="margin-bottom: 1.5rem;">Create New Administrator</h3>
+                <form id="addUserForm" class="add-user-form">
+                    <input type="text" id="new-username" placeholder="Target Username" required>
+                    <input type="password" id="new-password" placeholder="Access Key" required>
+                    <button type="submit" class="btn btn-primary">DEPLOY_USER</button>
+                </form>
 
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalEntries">...</div>
-                    <div class="stat-label">Total System Records</div>
-                </div>
-                <div class="stat-card" style="border-color: #ef4444;">
-                    <div class="stat-value">Active</div>
-                    <div class="stat-label">Superuser Status</div>
-                </div>
-                <div class="glass-card" style="padding: 1rem;">
-                    <h4>Security Protocols</h4>
-                    <p style="font-size: 0.8rem; margin: 0.5rem 0;">Wipe Data (Disabled)</p>
-                    <p style="font-size: 0.8rem; margin: 0.5rem 0;">Override Session (Active)</p>
+                <h3 style="margin-bottom: 1rem;">Active Entities</h3>
+                <div id="userTableContainer">
+                    <p class="text-muted">Parsing user database...</p>
                 </div>
             </div>
         </div>
 
-        <div class="glass-card mt-4">
-            <h3>Registered User Accounts</h3>
-            <div id="userList" style="margin-top: 1rem;">
-                <p>Fetching user database...</p>
+        <!-- TAB: ACTIVITY LOGS -->
+        <div id="logs" class="tab-content">
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3>System Access Logs</h3>
+                    <button onclick="refreshData()" class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;">REFRESH_FEED</button>
+                </div>
+                <div id="logsTableContainer" style="overflow-x: auto;">
+                    <p class="text-muted">Streaming activity logs...</p>
+                </div>
             </div>
         </div>
+
     </main>
 
     <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby13HqjWnm0zcrlfCzFdOIoDtBX6CrZewvSfKU8UXcen-6jFpA8w8JQdbA8kvNIAOc6Rg/exec';
+        let cachedData = null;
+
+        // Security Check
         const token = localStorage.getItem('admin_token');
-        if (!token || !Utilities_atob(token).startsWith('DEV:')) {
+        if (!token || !atob(token).startsWith('DEV:')) {
             window.location.href = 'login.html';
         }
 
-        function Utilities_atob(str) {
-            return atob(str);
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick').includes(tabId)));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            logTerminal(`Switched context to: ${tabId.toUpperCase()}`);
         }
 
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby13HqjWnm0zcrlfCzFdOIoDtBX6CrZewvSfKU8UXcen-6jFpA8w8JQdbA8kvNIAOc6Rg/exec';
-
-        async function initMonitor() {
+        async function refreshData() {
             try {
                 const response = await fetch(`${SCRIPT_URL}?type=all_data`);
-                const data = await response.json();
-                
-                let count = 0;
-                Object.values(data).forEach(sheet => count += (sheet.length - 1));
-                document.getElementById('totalEntries').textContent = count;
-
-                logTerminal('Successfully parsed all sheets.');
-                logTerminal(`Total records detected: ${count}`);
-
-                // Fetch Users specifically if we have a type for it or just look in all_data if it's there
-                // For now, let's assume we can fetch 'Users' sheet if we add it to all_data in Apps Script
-                if (data.Users) {
-                    renderUsers(data.Users);
-                } else {
-                    document.getElementById('userList').innerHTML = '<p>Access to Users sheet restricted or sheet missing.</p>';
-                }
-
+                cachedData = await response.json();
+                updateStats();
+                renderUsers();
+                renderLogs();
+                logTerminal('Data stream refreshed successfully.');
             } catch (err) {
-                logTerminal('Error: Connection timed out.');
+                logTerminal('CRITICAL_ERROR: Failed to reach backend.');
             }
         }
+
+        function updateStats() {
+            let total = 0;
+            // Sum all sheets except Users and Logs
+            Object.keys(cachedData).forEach(key => {
+                if (key !== 'Users' && key !== 'SessionLogs') {
+                    total += (cachedData[key].length - 1);
+                }
+            });
+            document.getElementById('stat-records').textContent = total;
+            document.getElementById('stat-users').textContent = cachedData.Users ? cachedData.Users.length - 1 : 0;
+        }
+
+        function renderUsers() {
+            const container = document.getElementById('userTableContainer');
+            const users = cachedData.Users;
+            if (!users || users.length <= 1) {
+                container.innerHTML = '<p class="text-muted">No entities found.</p>';
+                return;
+            }
+
+            let html = '<table class="data-table"><thead><tr><th>Entity</th><th>Action</th></tr></thead><tbody>';
+            users.slice(1).forEach((u, i) => {
+                html += `
+                    <tr>
+                        <td><strong style="color: var(--text);">${u[0]}</strong></td>
+                        <td><button class="action-btn-red" onclick="deleteEntity('${u[0]}', ${i})">DELETE</button></td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logsTableContainer');
+            const logs = cachedData.SessionLogs;
+            if (!logs || logs.length <= 1) {
+                container.innerHTML = '<p class="text-muted">Activity feed empty.</p>';
+                return;
+            }
+
+            let html = '<table class="data-table"><thead><tr><th>Timestamp</th><th>Entity</th><th>Event</th></tr></thead><tbody>';
+            logs.slice(1).reverse().forEach(l => {
+                const isSuper = l[2].includes('Superuser');
+                html += `
+                    <tr>
+                        <td>${l[0]}</td>
+                        <td style="${isSuper ? 'color: var(--dev-red); font-weight: bold;' : ''}">${l[1]}</td>
+                        <td><span class="badge" style="background: ${l[2] === 'Logout' ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)'}; color: ${l[2] === 'Logout' ? 'var(--dev-red)' : 'var(--dev-green)'};">${l[2]}</span></td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function deleteEntity(username, index) {
+            if (!confirm(`Permanently wipe entity: ${username}?`)) return;
+            logTerminal(`Initiating wipe: ${username}`);
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'delete', sheetName: 'Users', rowIndex: index })
+                });
+                const res = await response.json();
+                if (res.success) {
+                    logTerminal(`Entity wiped: ${username}`);
+                    refreshData();
+                }
+            } catch (e) {
+                logTerminal('WIPE_FAILED: Connection error.');
+            }
+        }
+
+        document.getElementById('addUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const password = document.getElementById('new-password').value;
+            logTerminal(`Deploying new entity: ${username}`);
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'add_user', username, password })
+                });
+                const res = await response.json();
+                if (res.success) {
+                    logTerminal(`Entity deployed: ${username}`);
+                    e.target.reset();
+                    refreshData();
+                }
+            } catch (err) {
+                logTerminal('DEPLOY_FAILED: Kernel rejection.');
+            }
+        });
 
         function logTerminal(msg) {
             const term = document.getElementById('terminal');
@@ -130,15 +312,6 @@
             line.textContent = `> [${new Date().toLocaleTimeString()}] ${msg}`;
             term.appendChild(line);
             term.scrollTop = term.scrollHeight;
-        }
-
-        function renderUsers(users) {
-            let html = '<table class="data-table"><thead><tr><th>Username</th><th>Permissions</th></tr></thead><tbody>';
-            users.slice(1).forEach(user => {
-                html += `<tr><td>${user[0]}</td><td><span class="badge">Standard Admin</span></td></tr>`;
-            });
-            html += '</tbody></table>';
-            document.getElementById('userList').innerHTML = html;
         }
 
         async function logout() {
@@ -155,7 +328,7 @@
             window.location.href = 'login.html';
         }
 
-        initMonitor();
+        refreshData();
     </script>
 </body>
 </html>
